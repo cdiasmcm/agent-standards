@@ -21,6 +21,50 @@ Read https://raw.githubusercontent.com/cdiasmcm/agent-standards/main/CREATE.md a
 The AI fetches this framework read-only, does the work, saves the results in **your agent's folder**
 (`reviews/`), and shows you the block-by-block results.
 
+## What the audit gives you
+One report, saved as `reviews/standards-audit-YYYY-MM-DD.md` in your agent's folder and summarized in
+the chat. It contains:
+
+1. **A verdict:** which stage the agent is ready for (Design, MVP, Pilot or Scale) and its proposed risk
+   tier (Lite, Standard or Critical).
+2. **A status for each of the 8 blocks:**
+
+   | Status | Meaning |
+   |--------|---------|
+   | **PASS** | Everything this tier requires is there, with evidence |
+   | **GAPS** | Partly there; the missing items are listed |
+   | **NOT STARTED** | The block exists but nothing is filled in |
+   | **MISSING** | No file or section for this block |
+   | **BLOCKED** | The task shouldn't be automated as is (e.g. people want to keep it human, or AI can't do it reliably yet) |
+
+3. **Evidence and gaps per block:** which of your files show it's covered, and what's missing or weak
+   (e.g. "no stop condition", "success criteria aren't testable", "credentials passed in prompts").
+4. **Blocking gaps:** what must be fixed before the next stage.
+5. **Next three actions:** the most useful fixes, in order.
+6. **Optional:** feedback on the standard itself (`reviews/standards-feedback-YYYY-MM-DD.md`).
+
+The audit has two parts. A **completeness check** tests whether each block's required fields are
+filled; `deploy/audit-agent.ps1` does it on agents built from the skeleton. A **judgment review** by
+the AI tests whether what's there is good enough. Agents not built from the skeleton are mapped onto
+the 8 blocks first. The audit never changes your agent's files, and it never writes to this framework.
+
+**Example summary** (shown in the chat):
+
+| # | Block | Status | One line |
+|---|-------|--------|----------|
+| 1 | Purpose | PASS | Clear job, north star and baseline; tier: Standard |
+| 2 | Steps | GAPS | No iteration or time cap; no escalation rule |
+| 3 | Input | GAPS | No freshness check on synced data |
+| 4 | Output | PASS | Output schema and data-quality checks in place |
+| 5 | Tools & Access | PASS | Write access only in dev; credentials from a vault |
+| 6 | Controls | GAPS | Kill switch designed but not tested |
+| 7 | Evals & DQ | MISSING | No golden set yet |
+| 8 | Operations | GAPS | Plan approvals inside sessions aren't logged |
+
+> **Verdict:** ready for MVP, not Pilot. **Blocking:** build the golden set (20 real cases), set
+> per-agent thresholds, test the kill switch. **Next:** 1) golden set 2) caps and escalation rule
+> 3) kill-switch test.
+
 | # | Block | | # | Block |
 |---|-------|---|---|-------|
 | 1 | Purpose | | 5 | Tools & Access |
