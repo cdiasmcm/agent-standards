@@ -1,0 +1,8 @@
+# Book PDFs stay out of the repo (copyright)
+reference/*.pdf
+reference/*.epub
+
+# OS / editor noise
+desktop.ini
+.DS_Store
+Thumbs.db
