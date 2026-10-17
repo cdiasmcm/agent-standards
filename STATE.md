@@ -1,6 +1,6 @@
 # STATE
 
-Resume here → Delete and recreate the GitHub repo (clean history), push, then make it public.
+Resume here → Test the one-line AUDIT prompt from a real agent folder; set up the Genie Code Git folder (DEPLOY.md).
 
 ## Log
 
@@ -25,6 +25,8 @@ Resume here → Delete and recreate the GitHub repo (clean history), push, then 
 - 2026-10-16 — Claude — Published to GitHub: https://github.com/cdiasmcm/agent-standards (private), main pushed; DEPLOY.md updated with the URL.
 
 - 2026-10-16 — Claude — Public release prep: one-prompt runbooks AUDIT.md and CREATE.md ("Read <raw URL> and …"), README "give it to your AI" section, audit script exits 2 with guidance on non-skeleton folders, book/workbook content trimmed to short citations, personal names and local paths generalized, history squashed to one commit with the GitHub no-reply email.
+
+- 2026-10-16 — Claude — Published publicly at https://github.com/cdiasmcm/agent-standards (clean single-commit history); raw AUDIT.md / CREATE.md URLs verified.
 
 ## Decisions
 
