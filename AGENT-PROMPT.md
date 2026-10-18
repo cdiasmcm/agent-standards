@@ -70,8 +70,8 @@ if the folder already holds the agent's files, it's **Adopt**.
      Write the job sentence as the Role in `PROMPT.md`, and the north star in `evals/EVAL-PLAN.md`.
    - **6 Controls:** who reviews which action and how long they can wait; confirm the must-never list you propose.
 4. **Draft everything else yourself** without asking per block, then show one summary at the end (block
-   table + `(assumed)` items) for the user to adjust: **2 Steps**
-   (one agent first; challenge every "agent" step), **3 Input**, **4 Output**, **5 Tools & Access**,
+   table + `(assumed)` items) for the user to adjust: **2 Steps** (the numbered steps go in
+   `PROMPT.md` → Steps, the limits in `AGENT.md` §2; one agent first; challenge every `A` step), **3 Input**, **4 Output**, **5 Tools & Access**,
    **7 Evals & DQ** (a first golden-set row from the dry-run plan), **8 Operations** (sensible defaults),
    and the rest of `PROMPT.md`. Fields above the tier are marked `N/A (tier)`. Record the model choice
    and any split into several agents in `DECISIONS.md`. Write the first `CHANGELOG.md` entry and a
@@ -85,7 +85,9 @@ to **merge** what the agent already knows into the skeleton, never to overwrite 
 1. **Inventory** every file and folder in the agent's folder (read-only). Nothing changes yet.
 2. **Propose a merge map** and show it: `existing file → skeleton target (file + section) → action`
    (merge content / move to `knowledge/` / unknown). Get one confirmation for the whole map. An existing skill file (e.g.
-   `data_engineer_skill.md`) becomes `skills/<name>/SKILL.md` with `name` in its frontmatter.
+   `data_engineer_skill.md`) becomes `skills/<name>/SKILL.md` with `name` in its frontmatter. Steps or
+   instructions found anywhere (including an old steps table in `AGENT.md` §2) go to `PROMPT.md` → Steps,
+   keeping each step's level.
 3. **Ask** about every row marked unknown or ambiguous, and about every conflict. An existing file with a
    skeleton name (e.g. its own `AGENT.md` or `CHANGELOG.md`) is merged section by section, never
    overwritten. **If you don't know what to do with a file, ask. Don't guess.**
@@ -106,7 +108,8 @@ to **merge** what the agent already knows into the skeleton, never to overwrite 
 2. Then do the **judgment review** per block. Is it really a Green Light task? Is each split into several
    agents backed by evidence? Are the success criteria testable yes/no statements? Is every "must never"
    enforced in code? Is the trifecta broken in code? Do the DQ checks cover what can go wrong with this data?
-   Are the tools distinct (no overlapping names, descriptions or parameters)? Walk the OWASP Top 10 for
+   Are the tools distinct (no overlapping names, descriptions or parameters)? Are step instructions kept
+   out of `AGENT.md` (they belong in `PROMPT.md` → Steps)? Walk the OWASP Top 10 for
    Agentic Applications (goal hijack, tool misuse, privilege abuse, supply chain, code execution, memory
    poisoning, inter-agent comms, cascading failures, human-trust exploitation, rogue agent) and note gaps.
 3. Write the report to `<agent folder>/reviews/standards-audit-YYYY-MM-DD.md`: status per block,

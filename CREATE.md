@@ -45,8 +45,9 @@ The fields marked _(you)_ in `AGENT.md`. Keep it short.
 ## Step 4. Draft the rest, then show it for adjustment
 Fill these yourself without asking; fields above the tier get `N/A (tier)`. Mark guesses `(assumed)`.
 Show everything once, in step 5.
-- **2 Steps** (`AGENT.md` §2): one agent first; challenge every step tagged "agent". Then write the
-   rest of `PROMPT.md` (system prompt, how to hand work to a human, examples).
+- **2 Steps**: write the numbered steps in `PROMPT.md` → Steps, each starting with its level (`C`, `L`,
+   `W`, `A`, `H`); one agent first; challenge every `A` step. Put only the limits in `AGENT.md` §2. Then
+   write the rest of `PROMPT.md` (system prompt, how to hand work to a human, examples).
 - **3 Input** (`io/INPUT.md`): ask for any reference files the agent must follow (naming conventions,
    code lists, mappings). Save each as CSV or Markdown in `knowledge/` and list it in
    `knowledge/README.md`. **4 Output** (`io/OUTPUT.md`): a rule from a reference file that must

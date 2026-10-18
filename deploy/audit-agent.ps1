@@ -118,6 +118,11 @@ foreach ($b in $blocks) {
     $m = Measure-Fields $lines $tier
     $issues += $m.Open
 
+    # Steps live in PROMPT.md; an old-layout steps table left in AGENT.md section 2 is flagged for moving.
+    if ($b.N -eq 2 -and ($lines | Where-Object { $_ -match '^\|\s*#\s*\|\s*Step' })) {
+        $issues += 'AGENT.md section 2 still has a steps table: steps belong in PROMPT.md (Steps); move them there'
+    }
+
     # Blocks 2 and 3 have a second file: PROMPT.md (instructions) and knowledge/README.md (reference files).
     if ($b.Extra) {
         $extra = Read-Lines (Join-Path $Path $b.Extra)
@@ -134,6 +139,12 @@ foreach ($b in $blocks) {
                     if ($inFence -and $l.Trim() -eq 'TODO') { $placeholder = $true }
                 }
                 if ($placeholder) { $issues += 'PROMPT.md: system prompt not written yet' }
+                $inSteps = $false; $stepsOpen = $false
+                foreach ($l in $extra) {
+                    if ($l -match '^##\s') { $inSteps = ($l -match '^##\s+Steps'); continue }
+                    if ($inSteps -and $l -match '^\s*\d+\.\s' -and $l -match 'TODO') { $stepsOpen = $true }
+                }
+                if ($stepsOpen) { $issues += 'PROMPT.md: steps not written yet' }
             }
             if ($b.N -eq 3) {
                 foreach ($l in $extra) {

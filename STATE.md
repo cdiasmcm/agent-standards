@@ -42,6 +42,8 @@ Resume here → Test the one-line AUDIT prompt from a real agent folder; set up 
 
 - 2026-10-18 — Claude — "Ask only critical questions" rule (AGENT-PROMPT Rules): questions only for what the user alone knows, what decides go/no-go or the tier, or what could lose data; asked together in one list; everything else decided by the AI, guesses marked `(assumed)`, one summary at the end. Create and Adopt no longer confirm block by block. CREATE, START-HERE, SKILL, STANDARD and the local Claude skill updated.
 
+- 2026-10-18 — Claude — Steps moved out of AGENT.md: `PROMPT.md` gained `## Steps` (numbered list, each step starting with its level `C`/`L`/`W`/`A`/`H`; the only place steps are written); `AGENT.md` §2 is now "Limits" (done when, caps, escalation, agents/topology). Both audits flag unwritten steps in PROMPT.md and an old-layout steps table left in AGENT.md §2; parity verified on 3 cases. Create, Adopt (old steps → PROMPT.md Steps), Audit, CREATE, STANDARD and FRAMEWORK D3 updated.
+
 ## Decisions
 
 <!-- Append-only. Format: - YYYY-MM-DD — decision — why -->

@@ -81,7 +81,8 @@ Rules:
 - **Model tiering:** note per step the cheapest model tier likely to pass. An eval confirms it later
   (P14). Irreversible actions are gated in code whatever the model.
 
-**Exit:** every step tagged C / L / W / A / H.
+**Exit:** every step tagged C / L / W / A / H. The final steps are written as the numbered list in the
+agent's `PROMPT.md` → Steps; the stop condition and caps go in `AGENT.md` §2.
 
 ## D4. Candidate agents
 Group only the **A** steps (and the L/W steps that serve them) using the book's criteria:

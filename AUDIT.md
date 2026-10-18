@@ -63,7 +63,7 @@ holds several agents, list them and ask which one to audit (or audit each).
 For each block, check quality, not only presence (AGENT-PROMPT, Audit step 2). Is it a Green Light
 task? Is every extra agent justified by evidence? Are success criteria testable yes/no statements? Is
 every "must never" enforced in code? Is the trifecta broken in code? Do the data-quality checks fit this
-data? Are the tools distinct? Walk the OWASP Top 10 for Agentic Applications and note gaps. Derive the
+data? Are the tools distinct? Are step instructions kept out of `AGENT.md` (they belong in `PROMPT.md` → Steps)? Walk the OWASP Top 10 for Agentic Applications and note gaps. Derive the
 risk tier from the risk facts in `AGENT.md` §1 if none is stated.
 
 ## Step 5. Save and show the results

@@ -138,7 +138,7 @@ holds several agents, list them and ask which one to audit (or audit each).
 For each block, check quality, not only presence (AGENT-PROMPT, Audit step 2). Is it a Green Light
 task? Is every extra agent justified by evidence? Are success criteria testable yes/no statements? Is
 every "must never" enforced in code? Is the trifecta broken in code? Do the data-quality checks fit this
-data? Are the tools distinct? Walk the OWASP Top 10 for Agentic Applications and note gaps. Derive the
+data? Are the tools distinct? Are step instructions kept out of `AGENT.md` (they belong in `PROMPT.md` → Steps)? Walk the OWASP Top 10 for Agentic Applications and note gaps. Derive the
 risk tier from the risk facts in `AGENT.md` §1 if none is stated.
 
 ## Step 5. Save and show the results
@@ -205,8 +205,9 @@ The fields marked _(you)_ in `AGENT.md`. Keep it short.
 ## Step 4. Draft the rest, then show it for adjustment
 Fill these yourself without asking; fields above the tier get `N/A (tier)`. Mark guesses `(assumed)`.
 Show everything once, in step 5.
-- **2 Steps** (`AGENT.md` §2): one agent first; challenge every step tagged "agent". Then write the
-   rest of `PROMPT.md` (system prompt, how to hand work to a human, examples).
+- **2 Steps**: write the numbered steps in `PROMPT.md` → Steps, each starting with its level (`C`, `L`,
+   `W`, `A`, `H`); one agent first; challenge every `A` step. Put only the limits in `AGENT.md` §2. Then
+   write the rest of `PROMPT.md` (system prompt, how to hand work to a human, examples).
 - **3 Input** (`io/INPUT.md`): ask for any reference files the agent must follow (naming conventions,
    code lists, mappings). Save each as CSV or Markdown in `knowledge/` and list it in
    `knowledge/README.md`. **4 Output** (`io/OUTPUT.md`): a rule from a reference file that must
@@ -252,7 +253,7 @@ PATTERNS, PRINCIPLES). This page is the version you explain to someone.
 | # | Block | Every agent has… | Where in the skeleton | How-to |
 |---|-------|------------------|-----------------------|--------|
 | 1 | **Purpose** | The right task (Green Light), owners, the risk facts that set its tier, and a compliance check (AI disclosure, data protection). Its one-sentence job is the Role in `PROMPT.md`; its north star is in `evals/EVAL-PLAN.md` | `AGENT.md` §1 | FRAMEWORK D0–D1 · patterns O7, 11 |
-| 2 | **Steps** | A process map with each step tagged code / LLM / workflow / agent / human, a stop condition with caps, an escalation rule, one agent unless a split is proven, and its instructions to the model (role, system prompt, examples) | `AGENT.md` §2 + `PROMPT.md` | FRAMEWORK D2–D5 · patterns 1–2, O1, O2, O11, O13 |
+| 2 | **Steps** | A process map with each step tagged code / LLM / workflow / agent / human, a stop condition with caps, an escalation rule, one agent unless a split is proven, and its instructions to the model (role, system prompt, examples). The steps are instructions, so they live in the prompt | `PROMPT.md` (Role, Steps) + `AGENT.md` §2 (limits) | FRAMEWORK D2–D5 · patterns 1–2, O1, O2, O11, O13 |
 | 3 | **Input** | The standard input envelope, its own payload fields, and **input data-quality checks** (complete, valid, fresh, no duplicates, trusted vs untrusted), and its reference files (naming conventions, code lists, mappings) as versioned CSV/Markdown | `io/INPUT.md` + `knowledge/` | AGENT-IO · patterns 7–8, 18, O12 |
 | 4 | **Output** | The standard output envelope, its own result fields, and **output data-quality checks** (schema-valid, required fields, grounded/cited) | `io/OUTPUT.md` | AGENT-IO · patterns O3 (L1), O8 |
 | 5 | **Tools & Access** | Distinct, namespaced tools with read/write rights; its own identity with short-lived credentials; safe writes; the trifecta broken in code; vetted third-party tools; every skill listed (own skills as `skills/<name>/SKILL.md`) | `AGENT.md` §5 + `skills/` | patterns 3, 18–20, O8 · PLATFORM §4b |
@@ -390,8 +391,8 @@ if the folder already holds the agent's files, it's **Adopt**.
      Write the job sentence as the Role in `PROMPT.md`, and the north star in `evals/EVAL-PLAN.md`.
    - **6 Controls:** who reviews which action and how long they can wait; confirm the must-never list you propose.
 4. **Draft everything else yourself** without asking per block, then show one summary at the end (block
-   table + `(assumed)` items) for the user to adjust: **2 Steps**
-   (one agent first; challenge every "agent" step), **3 Input**, **4 Output**, **5 Tools & Access**,
+   table + `(assumed)` items) for the user to adjust: **2 Steps** (the numbered steps go in
+   `PROMPT.md` → Steps, the limits in `AGENT.md` §2; one agent first; challenge every `A` step), **3 Input**, **4 Output**, **5 Tools & Access**,
    **7 Evals & DQ** (a first golden-set row from the dry-run plan), **8 Operations** (sensible defaults),
    and the rest of `PROMPT.md`. Fields above the tier are marked `N/A (tier)`. Record the model choice
    and any split into several agents in `DECISIONS.md`. Write the first `CHANGELOG.md` entry and a
@@ -405,7 +406,9 @@ to **merge** what the agent already knows into the skeleton, never to overwrite 
 1. **Inventory** every file and folder in the agent's folder (read-only). Nothing changes yet.
 2. **Propose a merge map** and show it: `existing file → skeleton target (file + section) → action`
    (merge content / move to `knowledge/` / unknown). Get one confirmation for the whole map. An existing skill file (e.g.
-   `data_engineer_skill.md`) becomes `skills/<name>/SKILL.md` with `name` in its frontmatter.
+   `data_engineer_skill.md`) becomes `skills/<name>/SKILL.md` with `name` in its frontmatter. Steps or
+   instructions found anywhere (including an old steps table in `AGENT.md` §2) go to `PROMPT.md` → Steps,
+   keeping each step's level.
 3. **Ask** about every row marked unknown or ambiguous, and about every conflict. An existing file with a
    skeleton name (e.g. its own `AGENT.md` or `CHANGELOG.md`) is merged section by section, never
    overwritten. **If you don't know what to do with a file, ask. Don't guess.**
@@ -426,7 +429,8 @@ to **merge** what the agent already knows into the skeleton, never to overwrite 
 2. Then do the **judgment review** per block. Is it really a Green Light task? Is each split into several
    agents backed by evidence? Are the success criteria testable yes/no statements? Is every "must never"
    enforced in code? Is the trifecta broken in code? Do the DQ checks cover what can go wrong with this data?
-   Are the tools distinct (no overlapping names, descriptions or parameters)? Walk the OWASP Top 10 for
+   Are the tools distinct (no overlapping names, descriptions or parameters)? Are step instructions kept
+   out of `AGENT.md` (they belong in `PROMPT.md` → Steps)? Walk the OWASP Top 10 for
    Agentic Applications (goal hijack, tool misuse, privilege abuse, supply chain, code execution, memory
    poisoning, inter-agent comms, cascading failures, human-trust exploitation, rogue agent) and note gaps.
 3. Write the report to `<agent folder>/reviews/standards-audit-YYYY-MM-DD.md`: status per block,
@@ -570,18 +574,15 @@ task-scoped credentials from the vault (pattern 20).
 - [L] **Risk facts** (they set the tier): personal data TODO · irreversible or external actions TODO · money, health or legal TODO · changes anything or people rely on it TODO (each yes / no → any of the first three = Critical; else the fourth = Standard; else Lite)
 - [if: user-facing, personal data or regulated] **Compliance:** AI disclosure TODO · data protection (lawful basis, minimization, retention) TODO · regulatory and record-keeping TODO
 
-## 2. Steps
-*What happens, and when does it stop?* Drafted by the AI from §1. How-to: FRAMEWORK D2–D5, patterns O1, O11.
-
-| # | Step (verb + object) | Level (C code / L LLM call / W workflow / A agent / H human) | Why this level | Tier |
-|---|----------------------|--------------------------------------------------------------|----------------|------|
-| 1 | TODO | TODO | TODO | [L] |
+## 2. Limits
+*When does it stop?* Drafted by the AI from §1. The steps themselves are in `PROMPT.md` → Steps.
+How-to: FRAMEWORK D2–D5, patterns O1, O11.
 
 - [L] **Limits** (enforced in code): done when TODO · max iterations TODO · timeout TODO s · max cost per run TODO · escalate to a human after TODO failed attempts, or on TODO
 - [if: more than one agent] **Agents and topology:** TODO (hierarchical / pipeline / peer-to-peer + validator / swarm; the reason and evidence for each extra agent go in `DECISIONS.md`)
 
 ## 5. Tools & Access
-*What can it touch, and with which identity?* Drafted by the AI from the steps. How-to: patterns 3, 18–20, O8; PLATFORM §4b.
+*What can it touch, and with which identity?* Drafted by the AI from the steps in `PROMPT.md`. How-to: patterns 3, 18–20, O8; PLATFORM §4b.
 
 | Name (e.g. `crm.get_contact`, `data-engineer`) | Type (tool / MCP / skill) | Own or third-party + pinned version | Purpose | Read / Write | Scope | Tier |
 |------------------------------------------------|---------------------------|-------------------------------------|---------|--------------|-------|------|
@@ -624,7 +625,7 @@ must-never list. How the model is told about them goes in `PROMPT.md`. How-to: p
 
 **Fixed rules** (from the standard; nothing to fill)
 - Every run is a new request: an input envelope with a `request_id` (`AGENT-IO.md`). It ends with an exit reason: done / cap / timeout / budget / error / human_gate.
-- The model's instructions (job, how to do each step, how to behave) live in `PROMPT.md`.
+- The model's instructions (job, the steps and how to do them, how to behave) live in `PROMPT.md`.
 - Run data: production → the stores above; local and dev runs → `runs/` (git-ignored). Nothing per request is committed; only PII-scrubbed cases go to `io/examples/` or the golden set.
 - One release = prompt + model + tools + memory config + I/O contract + `knowledge/` + `skills/`, recorded in `CHANGELOG.md` (its top row is the current version). Handoff files: `STATE.md`, `DECISIONS.md`, `CHANGELOG.md`, `reviews/`. Each human-decision log entry records: request_id, agent version, action, preview shown, decision, decided_by, time, reason, final value.
 - Tracing follows OpenTelemetry GenAI conventions unless the platform has its own. The registry entry is built from the header, the Role in `PROMPT.md` and §8.
@@ -635,7 +636,7 @@ must-never list. How the model is told about them goes in `PROMPT.md`. How-to: p
 
 # Prompt — the instructions the model gets
 
-*Part of block 2 Steps: how the model is told to do its steps.* The prompt **steers**; anything that
+*Part of block 2 Steps: the job, the steps and how the model does them.* The prompt **steers**; anything that
 must always hold is enforced in code (`AGENT.md` §6, `io/OUTPUT.md` DQ checks). Every change here is a
 new version in `CHANGELOG.md` and re-runs the evals. No secrets, credentials or personal data in this
 file.
@@ -656,6 +657,14 @@ Write the full instructions in the block below. The audit flags it while it stil
 ```text
 TODO
 ```
+
+## Steps
+The procedure, in order: the only place the steps are written. Start each step with its level:
+`C` code, `L` one LLM call, `W` workflow, `A` agent, `H` human. Use the simplest level that works; an
+`A` step says why nothing simpler can do it. `C` steps are run by code, not the model; they're listed
+so the model knows they happen. The audit flags this section while it still says TODO.
+
+1. `L` TODO (e.g. Profile every column: type, null rate, distinct count, min/max, length, format patterns)
 
 ## Examples (few-shot)
 Short, real, PII-scrubbed examples (from `io/examples/` or the golden set). Not the same cases the evals
@@ -1058,7 +1067,8 @@ Rules:
 - **Model tiering:** note per step the cheapest model tier likely to pass. An eval confirms it later
   (P14). Irreversible actions are gated in code whatever the model.
 
-**Exit:** every step tagged C / L / W / A / H.
+**Exit:** every step tagged C / L / W / A / H. The final steps are written as the numbered list in the
+agent's `PROMPT.md` → Steps; the stop condition and caps go in `AGENT.md` §2.
 
 ## D4. Candidate agents
 Group only the **A** steps (and the L/W steps that serve them) using the book's criteria:

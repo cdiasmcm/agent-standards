@@ -179,6 +179,10 @@ def audit_folder(path):
         total, open_fields = _measure(lines, tier)
         issues += open_fields
 
+        # Steps live in PROMPT.md; an old-layout steps table left in AGENT.md section 2 is flagged for moving.
+        if n == 2 and any(_has(r'^\|\s*#\s*\|\s*Step', l) for l in lines):
+            issues.append('AGENT.md section 2 still has a steps table: steps belong in PROMPT.md (Steps); move them there')
+
         # Blocks 2 and 3 have a second file: PROMPT.md (instructions) and knowledge/README.md (reference files).
         if extra_rel:
             extra = _read_lines(os.path.join(path, extra_rel))
@@ -201,6 +205,15 @@ def audit_folder(path):
                             placeholder = True
                     if placeholder:
                         issues.append('PROMPT.md: system prompt not written yet')
+                    in_steps = steps_open = False
+                    for l in extra:
+                        if _has(r'^##\s', l):
+                            in_steps = _has(r'^##\s+Steps', l)
+                            continue
+                        if in_steps and re.match(r'^\s*\d+\.\s', l) and _has('TODO', l):
+                            steps_open = True
+                    if steps_open:
+                        issues.append('PROMPT.md: steps not written yet')
                 if n == 3:
                     for l in extra:
                         if not l.startswith('|'):

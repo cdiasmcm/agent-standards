@@ -20,18 +20,15 @@
 - [L] **Risk facts** (they set the tier): personal data TODO · irreversible or external actions TODO · money, health or legal TODO · changes anything or people rely on it TODO (each yes / no → any of the first three = Critical; else the fourth = Standard; else Lite)
 - [if: user-facing, personal data or regulated] **Compliance:** AI disclosure TODO · data protection (lawful basis, minimization, retention) TODO · regulatory and record-keeping TODO
 
-## 2. Steps
-*What happens, and when does it stop?* Drafted by the AI from §1. How-to: FRAMEWORK D2–D5, patterns O1, O11.
-
-| # | Step (verb + object) | Level (C code / L LLM call / W workflow / A agent / H human) | Why this level | Tier |
-|---|----------------------|--------------------------------------------------------------|----------------|------|
-| 1 | TODO | TODO | TODO | [L] |
+## 2. Limits
+*When does it stop?* Drafted by the AI from §1. The steps themselves are in `PROMPT.md` → Steps.
+How-to: FRAMEWORK D2–D5, patterns O1, O11.
 
 - [L] **Limits** (enforced in code): done when TODO · max iterations TODO · timeout TODO s · max cost per run TODO · escalate to a human after TODO failed attempts, or on TODO
 - [if: more than one agent] **Agents and topology:** TODO (hierarchical / pipeline / peer-to-peer + validator / swarm; the reason and evidence for each extra agent go in `DECISIONS.md`)
 
 ## 5. Tools & Access
-*What can it touch, and with which identity?* Drafted by the AI from the steps. How-to: patterns 3, 18–20, O8; PLATFORM §4b.
+*What can it touch, and with which identity?* Drafted by the AI from the steps in `PROMPT.md`. How-to: patterns 3, 18–20, O8; PLATFORM §4b.
 
 | Name (e.g. `crm.get_contact`, `data-engineer`) | Type (tool / MCP / skill) | Own or third-party + pinned version | Purpose | Read / Write | Scope | Tier |
 |------------------------------------------------|---------------------------|-------------------------------------|---------|--------------|-------|------|
@@ -74,7 +71,7 @@ must-never list. How the model is told about them goes in `PROMPT.md`. How-to: p
 
 **Fixed rules** (from the standard; nothing to fill)
 - Every run is a new request: an input envelope with a `request_id` (`AGENT-IO.md`). It ends with an exit reason: done / cap / timeout / budget / error / human_gate.
-- The model's instructions (job, how to do each step, how to behave) live in `PROMPT.md`.
+- The model's instructions (job, the steps and how to do them, how to behave) live in `PROMPT.md`.
 - Run data: production → the stores above; local and dev runs → `runs/` (git-ignored). Nothing per request is committed; only PII-scrubbed cases go to `io/examples/` or the golden set.
 - One release = prompt + model + tools + memory config + I/O contract + `knowledge/` + `skills/`, recorded in `CHANGELOG.md` (its top row is the current version). Handoff files: `STATE.md`, `DECISIONS.md`, `CHANGELOG.md`, `reviews/`. Each human-decision log entry records: request_id, agent version, action, preview shown, decision, decided_by, time, reason, final value.
 - Tracing follows OpenTelemetry GenAI conventions unless the platform has its own. The registry entry is built from the header, the Role in `PROMPT.md` and §8.
