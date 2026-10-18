@@ -25,7 +25,8 @@ Read `STANDARD.md`, then the **Create** workflow in `AGENT-PROMPT.md`.
    When in doubt, choose the higher tier.
 2. If `<agent folder>` already has files, **stop**: this is an existing agent. Switch to the **Adopt**
    workflow in `AGENT-PROMPT.md` (merge, never overwrite) and tell the user.
-   Otherwise copy the framework's `skeleton/` folder to `<agent folder>/`. If you can't write files, output each
+   Otherwise copy the framework's `skeleton/` folder to `<agent folder>/`, **including dot-files**
+   (`.gitignore` keeps per-request run data in `runs/` out of every commit; `cp skeleton/*` misses it). If you can't write files, output each
    skeleton file as a Markdown block with its path.
 3. Set `Tier`, `Stage: Design` and the owners in `AGENT.md`.
 

@@ -29,7 +29,7 @@ PATTERNS, PRINCIPLES). This page is the version you explain to someone.
 | 5 | **Tools & Access** | Distinct, namespaced tools with read/write rights; its own identity with short-lived credentials; safe writes; the trifecta broken in code; vetted third-party tools; every skill listed (own skills as `skills/<name>/SKILL.md`) | `AGENT.md` §5 + `skills/` | patterns 3, 18–20, O8 · PLATFORM §4b |
 | 6 | **Controls** | A human-control level (H1–H5) per action, "must never" rules enforced in code, an autonomy plan, guardrails, and a kill switch | `AGENT.md` §6 | patterns 4, 21, O5, O10 · OWASP Agentic |
 | 7 | **Evals & DQ** | Testable success criteria (5 layers), a golden set of real cases, graders, a baseline, stage thresholds, and data-quality metrics tracked over time | `evals/` | EVALS E1–E7 · patterns 10–17, O3, O4, O9 |
-| 8 | **Operations** | Model and enforced budget, redacted logs, version history, rollout and rollback, a human-decision log, handoff files, and a registry entry | `AGENT.md` §8 + `CHANGELOG.md`, `DECISIONS.md`, `STATE.md`, `reviews/` | PLATFORM · patterns O6 · P24 |
+| 8 | **Operations** | Model and enforced budget, redacted logs, version history, rollout and rollback, a human-decision log, handoff files, a registry entry, and per-request data kept out of git (production → trace store; local runs → git-ignored `runs/`) | `AGENT.md` §8 + `CHANGELOG.md`, `DECISIONS.md`, `STATE.md`, `reviews/` | PLATFORM · patterns O6 · P24 |
 
 ## How much applies: the risk tier
 Every field in the skeleton is tagged **[L]**, **[S]** or **[C]**:

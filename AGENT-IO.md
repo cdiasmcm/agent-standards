@@ -69,3 +69,6 @@ task-scoped credentials from the vault (pattern 20).
   agent), map the same content onto A2A messages, tasks and artifacts (O13).
 - Every human decision on a `needs_approval` output is logged with its `request_id` and `versions`
   (`AGENT.md` §8, human-decision log).
+- **Where envelopes persist:** in production, in the trace store named in `AGENT.md` §8. In local and
+  dev runs, in `runs/YYYY-MM-DD/<request_id>/` inside the agent's folder, which `.gitignore` keeps out
+  of every commit. Only PII-scrubbed samples are committed (`io/examples/`, `evals/GOLDEN-SET.md`).

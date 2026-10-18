@@ -36,6 +36,8 @@ Resume here → Test the one-line AUDIT prompt from a real agent folder; set up 
 
 - 2026-10-18 — Claude — Skills added to block 5: `skeleton/skills/README.md` (one folder per skill, `skills/<name>/SKILL.md`, Agent Skills format; folder name = frontmatter `name`), a skills table in `AGENT.md` §5 (own / third-party, source + pinned version, reach, approval), skills in the release unit. Both audit scripts check listed own skills exist, every skills/ folder has a SKILL.md, and its name matches the folder; parity verified on 5 cases. STANDARD, CREATE, AGENT-PROMPT (incl. Adopt hint), README and the bundle updated.
 
+- 2026-10-18 — Claude — Per-request data kept out of git: `skeleton/runs/README.md` (local/dev runs, one folder per request) and `skeleton/.gitignore` (runs/* except README, .env, tooling). `AGENT.md` §8 states where run data lands (production → trace store; dev → runs/) and asks for the trace store. Both audits flag a missing `.gitignore` or one that doesn't ignore `runs/`; parity verified; `git check-ignore` confirmed runs data and .env ignored, README and io/examples kept. CREATE/AGENT-PROMPT copy dot-files; Adopt merges an existing .gitignore. AGENT-IO, STANDARD, README, bundle updated.
+
 ## Decisions
 
 <!-- Append-only. Format: - YYYY-MM-DD — decision — why -->
@@ -45,6 +47,7 @@ Resume here → Test the one-line AUDIT prompt from a real agent folder; set up 
 - 2026-10-16 — Book text is paraphrased, with our own adjustments marked "Our rule" — keeps the book's view and ours apart, and respects copyright.
 - 2026-10-16 — Context-rot threshold (~100K in the book) is treated as model-specific and measured with evals — the book is dated Oct 2025 and models have changed since.
 - 2026-10-16 — Every solution is decomposed with FRAMEWORK D1–D7 before any build; steps are tagged C/L/W/A/H and only A steps become agents — the owner wants each agent to solve one problem at a time; the simplest-level rule follows Anthropic's *Building Effective Agents* (the book's source for pattern 2).
+- 2026-10-18 — Local run data lives in a git-ignored `runs/` inside the agent folder (owner's choice over keeping it outside the folder); production never writes back to the repo — changes flow dev → git → gate → deploy only.
 - 2026-10-17 — Existing agents are merged into the skeleton (Adopt), never overwritten; no folders outside the skeleton; unplaceable files are asked about; originals go to `_archive/`, which the agent disregards — the owner's rules for applying the framework to agents that already have files.
 - 2026-10-16 — Single-responsibility test S1–S7 with a ≤ 7 tools starting heuristic — makes "one problem per agent" checkable instead of a matter of taste.
 - 2026-10-16 — Every agent needs a charter with a 5-layer success contract (output, quality, business, operations, safety), written as yes/no criteria with per-stage thresholds — the owner asked for clear success criteria for each agent.

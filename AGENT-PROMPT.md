@@ -61,7 +61,8 @@ if the folder already holds the agent's files, it's **Adopt**.
 ### 1. Create: a new agent
 1. Ask for the **tier** (Lite / Standard / Critical; when in doubt, go higher) and where the solution's
    folder is.
-2. Copy `skeleton/` to `<solution folder>/<agent-name>/`. If you can't write files, output each file as
+2. Copy `skeleton/` to `<solution folder>/<agent-name>/`, including its dot-files (`.gitignore`, which keeps
+   per-request data in `runs/` out of commits). If you can't write files, output each file as
    a Markdown block with its path.
 3. Fill the blocks **in order, one at a time**, asking only the questions that block's fields need for the
    tier (fields tagged above the tier are marked `N/A (tier)`):
@@ -85,7 +86,8 @@ to **merge** what the agent already knows into the skeleton, never to overwrite 
 3. **Ask** about every row marked unknown or ambiguous, and about every conflict. An existing file with a
    skeleton name (e.g. its own `AGENT.md` or `CHANGELOG.md`) is merged section by section, never
    overwritten. **If you don't know what to do with a file, ask. Don't guess.**
-4. Copy in the skeleton files that don't exist yet, then merge content into them **block by block**,
+4. Copy in the skeleton files that don't exist yet (including `.gitignore`; an existing `.gitignore` gets
+   the skeleton's lines added, never replaced), then merge content into them **block by block**,
    confirming each block as in Create. Mark merged fields with `(from <original path>)`.
 5. Copy each merged original into `_archive/YYYY-MM-DD-pre-standard/` (same relative path) and log it in
    `_archive/README.md`. Remove originals from their old place **only after the user approves the list**.

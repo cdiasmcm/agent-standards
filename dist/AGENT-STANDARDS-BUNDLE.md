@@ -22,6 +22,8 @@
 - FILE: skeleton/CHANGELOG.md
 - FILE: skeleton/DECISIONS.md
 - FILE: skeleton/STATE.md
+- FILE: skeleton/runs/README.md
+- FILE: skeleton/.gitignore
 - FILE: skeleton/_archive/README.md
 - FILE: FRAMEWORK.md
 - FILE: EVALS.md
@@ -180,7 +182,8 @@ Read `STANDARD.md`, then the **Create** workflow in `AGENT-PROMPT.md`.
    When in doubt, choose the higher tier.
 2. If `<agent folder>` already has files, **stop**: this is an existing agent. Switch to the **Adopt**
    workflow in `AGENT-PROMPT.md` (merge, never overwrite) and tell the user.
-   Otherwise copy the framework's `skeleton/` folder to `<agent folder>/`. If you can't write files, output each
+   Otherwise copy the framework's `skeleton/` folder to `<agent folder>/`, **including dot-files**
+   (`.gitignore` keeps per-request run data in `runs/` out of every commit; `cp skeleton/*` misses it). If you can't write files, output each
    skeleton file as a Markdown block with its path.
 3. Set `Tier`, `Stage: Design` and the owners in `AGENT.md`.
 
@@ -240,7 +243,7 @@ PATTERNS, PRINCIPLES). This page is the version you explain to someone.
 | 5 | **Tools & Access** | Distinct, namespaced tools with read/write rights; its own identity with short-lived credentials; safe writes; the trifecta broken in code; vetted third-party tools; every skill listed (own skills as `skills/<name>/SKILL.md`) | `AGENT.md` §5 + `skills/` | patterns 3, 18–20, O8 · PLATFORM §4b |
 | 6 | **Controls** | A human-control level (H1–H5) per action, "must never" rules enforced in code, an autonomy plan, guardrails, and a kill switch | `AGENT.md` §6 | patterns 4, 21, O5, O10 · OWASP Agentic |
 | 7 | **Evals & DQ** | Testable success criteria (5 layers), a golden set of real cases, graders, a baseline, stage thresholds, and data-quality metrics tracked over time | `evals/` | EVALS E1–E7 · patterns 10–17, O3, O4, O9 |
-| 8 | **Operations** | Model and enforced budget, redacted logs, version history, rollout and rollback, a human-decision log, handoff files, and a registry entry | `AGENT.md` §8 + `CHANGELOG.md`, `DECISIONS.md`, `STATE.md`, `reviews/` | PLATFORM · patterns O6 · P24 |
+| 8 | **Operations** | Model and enforced budget, redacted logs, version history, rollout and rollback, a human-decision log, handoff files, a registry entry, and per-request data kept out of git (production → trace store; local runs → git-ignored `runs/`) | `AGENT.md` §8 + `CHANGELOG.md`, `DECISIONS.md`, `STATE.md`, `reviews/` | PLATFORM · patterns O6 · P24 |
 
 ## How much applies: the risk tier
 Every field in the skeleton is tagged **[L]**, **[S]** or **[C]**:
@@ -359,7 +362,8 @@ if the folder already holds the agent's files, it's **Adopt**.
 ### 1. Create: a new agent
 1. Ask for the **tier** (Lite / Standard / Critical; when in doubt, go higher) and where the solution's
    folder is.
-2. Copy `skeleton/` to `<solution folder>/<agent-name>/`. If you can't write files, output each file as
+2. Copy `skeleton/` to `<solution folder>/<agent-name>/`, including its dot-files (`.gitignore`, which keeps
+   per-request data in `runs/` out of commits). If you can't write files, output each file as
    a Markdown block with its path.
 3. Fill the blocks **in order, one at a time**, asking only the questions that block's fields need for the
    tier (fields tagged above the tier are marked `N/A (tier)`):
@@ -383,7 +387,8 @@ to **merge** what the agent already knows into the skeleton, never to overwrite 
 3. **Ask** about every row marked unknown or ambiguous, and about every conflict. An existing file with a
    skeleton name (e.g. its own `AGENT.md` or `CHANGELOG.md`) is merged section by section, never
    overwritten. **If you don't know what to do with a file, ask. Don't guess.**
-4. Copy in the skeleton files that don't exist yet, then merge content into them **block by block**,
+4. Copy in the skeleton files that don't exist yet (including `.gitignore`; an existing `.gitignore` gets
+   the skeleton's lines added, never replaced), then merge content into them **block by block**,
    confirming each block as in Create. Mark merged fields with `(from <original path>)`.
 5. Copy each merged original into `_archive/YYYY-MM-DD-pre-standard/` (same relative path) and log it in
    `_archive/README.md`. Remove originals from their old place **only after the user approves the list**.
@@ -503,6 +508,9 @@ task-scoped credentials from the vault (pattern 20).
   agent), map the same content onto A2A messages, tasks and artifacts (O13).
 - Every human decision on a `needs_approval` output is logged with its `request_id` and `versions`
   (`AGENT.md` §8, human-decision log).
+- **Where envelopes persist:** in production, in the trace store named in `AGENT.md` §8. In local and
+  dev runs, in `runs/YYYY-MM-DD/<request_id>/` inside the agent's folder, which `.gitignore` keeps out
+  of every commit. Only PII-scrubbed samples are committed (`io/examples/`, `evals/GOLDEN-SET.md`).
 
 ---
 
@@ -593,6 +601,8 @@ task-scoped credentials from the vault (pattern 20).
 - [L] **Model** (pinned version) + reasoning effort: TODO · **why this tier** (cheapest that passed the eval): TODO
 - [L] **Budget enforced at:** TODO (gateway / provider) · per run TODO · per month TODO
 - [L] **Logging:** what is logged TODO · secrets and personal data redacted TODO · who can read logs TODO
+- [L] **Where run data lands:** production → trace store and human-decision log (named below); local and dev runs → `runs/` (git-ignored); nothing per request is ever committed. Only PII-scrubbed cases are copied to `io/examples/` or the golden set (keep as is)
+- [L] **Trace store** for production envelopes and traces (e.g. a Unity Catalog table, MLflow traces): TODO
 - [L] **Registry entry:** agent TODO · solution TODO · mission TODO · tier/stage TODO · owners TODO · model TODO · status TODO · **portfolio registry kept at:** TODO (outside agent-standards)
 - [L] **Version history** kept in `CHANGELOG.md`: release unit = prompt (`PROMPT.md`) + model + tools + memory config + I/O contract + reference files (`knowledge/`) + skills (`skills/`) (keep as is)
 - [L] **Human-decision log** (runtime approvals, rejections, edits, overrides): stored in TODO · fields: request_id, agent version, action, preview shown, decision, decided_by, time, reason, final value (keep as is) · retention TODO · access TODO
@@ -876,6 +886,50 @@ Resume here → TODO (one concrete next action)
 
 ## Log
 <!-- Append-only. Newest at the bottom. Format: - YYYY-MM-DD — who — what was done / what is pending -->
+
+---
+
+# FILE: skeleton/runs/README.md
+
+# runs — local and dev run data (never committed)
+
+*Part of block 8 Operations.* When the agent runs during development or testing (in Claude Code, a
+Genie Code notebook, a local script), each request writes its data here, one folder per request:
+
+```
+runs/
+  YYYY-MM-DD/
+    <request_id>/
+      input.json     the input envelope (AGENT-IO.md)
+      output.json    the output envelope
+      trace.json     steps, tool calls, cost, exit_reason
+```
+
+- **Never committed.** `.gitignore` ignores everything here except this README, because run data holds
+  real inputs and can hold personal data.
+- **Never used in production.** A production run writes to the stores named in `AGENT.md` §8 (trace
+  store, human-decision log). Production runs a version deployed from git and never writes back into
+  the agent's folder.
+- **To keep a case** (a good example or a failure worth testing): remove names, emails, account numbers
+  and other personal data, then copy it to `io/examples/` or add it to `evals/GOLDEN-SET.md`.
+- Clean this folder whenever you like; nothing depends on it.
+
+---
+
+# FILE: skeleton/.gitignore
+
+# Per-request run data: never commit (real inputs, can hold personal data). See runs/README.md.
+runs/*
+!runs/README.md
+
+# Secrets: credentials come from a vault at run time, never from files in the repo
+.env
+*.env
+
+# Local tooling
+__pycache__/
+.DS_Store
+Thumbs.db
 
 ---
 

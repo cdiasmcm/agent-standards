@@ -83,6 +83,8 @@
 - [L] **Model** (pinned version) + reasoning effort: TODO · **why this tier** (cheapest that passed the eval): TODO
 - [L] **Budget enforced at:** TODO (gateway / provider) · per run TODO · per month TODO
 - [L] **Logging:** what is logged TODO · secrets and personal data redacted TODO · who can read logs TODO
+- [L] **Where run data lands:** production → trace store and human-decision log (named below); local and dev runs → `runs/` (git-ignored); nothing per request is ever committed. Only PII-scrubbed cases are copied to `io/examples/` or the golden set (keep as is)
+- [L] **Trace store** for production envelopes and traces (e.g. a Unity Catalog table, MLflow traces): TODO
 - [L] **Registry entry:** agent TODO · solution TODO · mission TODO · tier/stage TODO · owners TODO · model TODO · status TODO · **portfolio registry kept at:** TODO (outside agent-standards)
 - [L] **Version history** kept in `CHANGELOG.md`: release unit = prompt (`PROMPT.md`) + model + tools + memory config + I/O contract + reference files (`knowledge/`) + skills (`skills/`) (keep as is)
 - [L] **Human-decision log** (runtime approvals, rejections, edits, overrides): stored in TODO · fields: request_id, agent version, action, preview shown, decision, decided_by, time, reason, final value (keep as is) · retention TODO · access TODO

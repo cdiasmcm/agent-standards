@@ -1,0 +1,12 @@
+# Per-request run data: never commit (real inputs, can hold personal data). See runs/README.md.
+runs/*
+!runs/README.md
+
+# Secrets: credentials come from a vault at run time, never from files in the repo
+.env
+*.env
+
+# Local tooling
+__pycache__/
+.DS_Store
+Thumbs.db
