@@ -40,7 +40,9 @@ For each block, ask only the questions its fields need for the tier. Fields abov
    code lists, mappings). Save each as CSV or Markdown in `knowledge/` and list it in
    `knowledge/README.md`. → 4. **Output** (`io/OUTPUT.md`): a rule from a reference file that must
    always hold gets a DQ check against that file.
-5. **Tools & Access** (`AGENT.md` §5) → 6. **Controls** (`AGENT.md` §6)
+5. **Tools & Access** (`AGENT.md` §5): include the skills the agent uses. Own skills go in
+   `skills/<name>/SKILL.md` (one folder per skill, see `skills/README.md`); third-party skills are only
+   listed, with source and pinned version. → 6. **Controls** (`AGENT.md` §6)
 7. **Evals & DQ** (`evals/`): add a first golden-set row from the dry-run plan.
 8. **Operations** (`AGENT.md` §8), plus the first `CHANGELOG.md` entry and a `STATE.md` "Resume here".
 

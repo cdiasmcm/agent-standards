@@ -1,6 +1,6 @@
 # AGENT STANDARDS BUNDLE
 
-> Generated 2026-10-17 by deploy/build-bundle.ps1. Do not edit; edit the source files and rebuild.
+> Generated 2026-10-18 by deploy/build-bundle.ps1. Do not edit; edit the source files and rebuild.
 > This single file contains all the standards. Where the text says "read <FILE>.md", use that file's section below (headed "FILE: <name>").
 > Sections named skeleton/... are the templates for a new agent: recreate them as separate files in the agent's folder.
 
@@ -16,6 +16,7 @@
 - FILE: skeleton/io/INPUT.md
 - FILE: skeleton/knowledge/README.md
 - FILE: skeleton/io/OUTPUT.md
+- FILE: skeleton/skills/README.md
 - FILE: skeleton/evals/EVAL-PLAN.md
 - FILE: skeleton/evals/GOLDEN-SET.md
 - FILE: skeleton/CHANGELOG.md
@@ -194,7 +195,9 @@ For each block, ask only the questions its fields need for the tier. Fields abov
    code lists, mappings). Save each as CSV or Markdown in `knowledge/` and list it in
    `knowledge/README.md`. → 4. **Output** (`io/OUTPUT.md`): a rule from a reference file that must
    always hold gets a DQ check against that file.
-5. **Tools & Access** (`AGENT.md` §5) → 6. **Controls** (`AGENT.md` §6)
+5. **Tools & Access** (`AGENT.md` §5): include the skills the agent uses. Own skills go in
+   `skills/<name>/SKILL.md` (one folder per skill, see `skills/README.md`); third-party skills are only
+   listed, with source and pinned version. → 6. **Controls** (`AGENT.md` §6)
 7. **Evals & DQ** (`evals/`): add a first golden-set row from the dry-run plan.
 8. **Operations** (`AGENT.md` §8), plus the first `CHANGELOG.md` entry and a `STATE.md` "Resume here".
 
@@ -234,7 +237,7 @@ PATTERNS, PRINCIPLES). This page is the version you explain to someone.
 | 2 | **Steps** | A process map with each step tagged code / LLM / workflow / agent / human, a stop condition with caps, an escalation rule, one agent unless a split is proven, and its instructions to the model (role, system prompt, examples) | `AGENT.md` §2 + `PROMPT.md` | FRAMEWORK D2–D5 · patterns 1–2, O1, O2, O11, O13 |
 | 3 | **Input** | The standard input envelope, its own payload fields, and **input data-quality checks** (complete, valid, fresh, no duplicates, trusted vs untrusted), and its reference files (naming conventions, code lists, mappings) as versioned CSV/Markdown | `io/INPUT.md` + `knowledge/` | AGENT-IO · patterns 7–8, 18, O12 |
 | 4 | **Output** | The standard output envelope, its own result fields, and **output data-quality checks** (schema-valid, required fields, grounded/cited) | `io/OUTPUT.md` | AGENT-IO · patterns O3 (L1), O8 |
-| 5 | **Tools & Access** | Distinct, namespaced tools with read/write rights; its own identity with short-lived credentials; safe writes; the trifecta broken in code; vetted third-party tools | `AGENT.md` §5 | patterns 3, 18–20, O8 · PLATFORM §4b |
+| 5 | **Tools & Access** | Distinct, namespaced tools with read/write rights; its own identity with short-lived credentials; safe writes; the trifecta broken in code; vetted third-party tools; every skill listed (own skills as `skills/<name>/SKILL.md`) | `AGENT.md` §5 + `skills/` | patterns 3, 18–20, O8 · PLATFORM §4b |
 | 6 | **Controls** | A human-control level (H1–H5) per action, "must never" rules enforced in code, an autonomy plan, guardrails, and a kill switch | `AGENT.md` §6 | patterns 4, 21, O5, O10 · OWASP Agentic |
 | 7 | **Evals & DQ** | Testable success criteria (5 layers), a golden set of real cases, graders, a baseline, stage thresholds, and data-quality metrics tracked over time | `evals/` | EVALS E1–E7 · patterns 10–17, O3, O4, O9 |
 | 8 | **Operations** | Model and enforced budget, redacted logs, version history, rollout and rollback, a human-decision log, handoff files, and a registry entry | `AGENT.md` §8 + `CHANGELOG.md`, `DECISIONS.md`, `STATE.md`, `reviews/` | PLATFORM · patterns O6 · P24 |
@@ -316,7 +319,7 @@ Operations) and **3 golden rules** (simplest first · prompts steer, code enforc
 |------|------------|
 | `STANDARD.md` | The 8 blocks, tiers, stages, sources. Explain the standard from this page |
 | `AUDIT.md`, `CREATE.md` | Step-by-step runbooks when launched by URL ("Read <URL> and audit / create …") |
-| `skeleton/` | The template every agent starts from: `AGENT.md`, `PROMPT.md`, `io/INPUT.md`, `knowledge/`, `io/OUTPUT.md`, `evals/EVAL-PLAN.md`, `evals/GOLDEN-SET.md`, `CHANGELOG.md`, `DECISIONS.md`, `STATE.md`, `reviews/`, `_archive/` (originals after Adopt; disregarded by the agent) |
+| `skeleton/` | The template every agent starts from: `AGENT.md`, `PROMPT.md`, `io/INPUT.md`, `knowledge/`, `io/OUTPUT.md`, `skills/`, `evals/EVAL-PLAN.md`, `evals/GOLDEN-SET.md`, `CHANGELOG.md`, `DECISIONS.md`, `STATE.md`, `reviews/`, `_archive/` (originals after Adopt; disregarded by the agent) |
 | `AGENT-IO.md` | Standard input and output envelope (blocks 3–4) |
 | `deploy/audit-agent.ps1` | Completeness check per block (run it, or replicate its checks by reading the files) |
 | `deploy/audit_agent.py` | The same check in Python (same results), for tools without PowerShell such as Databricks Genie Code |
@@ -375,7 +378,8 @@ Use this when the agent's folder already has files (its own PRD, prompts, notes,
 to **merge** what the agent already knows into the skeleton, never to overwrite it or invent structure.
 1. **Inventory** every file and folder in the agent's folder (read-only). Nothing changes yet.
 2. **Propose a merge map** and show it: `existing file → skeleton target (file + section) → action`
-   (merge content / move to `knowledge/` / unknown). Wait for the user.
+   (merge content / move to `knowledge/` / unknown). Wait for the user. An existing skill file (e.g.
+   `data_engineer_skill.md`) becomes `skills/<name>/SKILL.md` with `name` in its frontmatter.
 3. **Ask** about every row marked unknown or ambiguous, and about every conflict. An existing file with a
    skeleton name (e.g. its own `AGENT.md` or `CHANGELOG.md`) is merged section by section, never
    overwritten. **If you don't know what to do with a file, ask. Don't guess.**
@@ -563,6 +567,12 @@ task-scoped credentials from the vault (pattern 20).
 - [if: runs code] **Sandbox** (rootless, capabilities dropped, read-only FS, deny-by-default network): TODO
 - [S] **Third-party tools / MCP servers / skills vetted** (source, permissions, version pinned): TODO
 
+**Skills** (own skills live in `skills/<name>/SKILL.md`; see `skills/README.md`). No skills? Replace the row's TODOs with `N/A (none)`.
+
+| Skill (`name`) | Own / third-party | What it does | Source + pinned version | Tools / data it can reach | Needs approval? | Tier |
+|----------------|-------------------|--------------|-------------------------|---------------------------|-----------------|------|
+| TODO | TODO | TODO | TODO | TODO | TODO | [if: skills] |
+
 ## 6. Controls
 *What must never happen, and who stays in control?* How-to: patterns 4, 21, O5, O10; P21, P25.
 
@@ -584,7 +594,7 @@ task-scoped credentials from the vault (pattern 20).
 - [L] **Budget enforced at:** TODO (gateway / provider) · per run TODO · per month TODO
 - [L] **Logging:** what is logged TODO · secrets and personal data redacted TODO · who can read logs TODO
 - [L] **Registry entry:** agent TODO · solution TODO · mission TODO · tier/stage TODO · owners TODO · model TODO · status TODO · **portfolio registry kept at:** TODO (outside agent-standards)
-- [L] **Version history** kept in `CHANGELOG.md`: release unit = prompt (`PROMPT.md`) + model + tools + memory config + I/O contract + reference files (`knowledge/`) (keep as is)
+- [L] **Version history** kept in `CHANGELOG.md`: release unit = prompt (`PROMPT.md`) + model + tools + memory config + I/O contract + reference files (`knowledge/`) + skills (`skills/`) (keep as is)
 - [L] **Human-decision log** (runtime approvals, rejections, edits, overrides): stored in TODO · fields: request_id, agent version, action, preview shown, decision, decided_by, time, reason, final value (keep as is) · retention TODO · access TODO
 - [S] **Edits and overrides feed evals** (`evals/GOLDEN-SET.md`): TODO (how, how often)
 - [S] **Rollout:** shadow TODO → canary TODO % → full · **rollback trigger:** TODO · **rollback method:** repoint to the last good `CHANGELOG.md` version, clear caches TODO
@@ -725,6 +735,41 @@ Same types and columns as `INPUT.md`. This table is the source for the generated
 
 ---
 
+# FILE: skeleton/skills/README.md
+
+# Skills — packaged capabilities the agent loads when a task needs them
+
+*Part of block 5 Tools & Access.* A skill is a folder of instructions (and optionally scripts or
+reference files) that the model loads only when it's relevant. It follows the open Agent Skills format
+(agentskills.io), which Claude Code, Databricks Genie Code and other tools read.
+
+## Layout: one folder per skill
+```
+skills/
+  data-engineer/
+    SKILL.md          required, exactly this name
+    scripts/          optional: code the skill runs
+    references/       optional: docs the skill reads on demand
+```
+- **Why a folder, not `data_engineer_skill.md`:** tools discover a skill only as a folder holding a file
+  named exactly `SKILL.md`. A renamed file is never loaded, and the folder keeps the skill's scripts and
+  references together with it.
+- **Name:** the folder name equals the `name` in the frontmatter: lowercase letters, digits and hyphens
+  (`data-engineer`).
+- **Frontmatter:** `name` and `description` (what it does and when to use it; the model reads this to
+  decide whether to load the skill).
+- **No secrets, credentials or personal data** in a skill.
+
+## Rules
+- Every skill, own or third-party, is listed in the skills table in `AGENT.md` §5, with what it can
+  reach and whether it needs approval.
+- Only the agent's **own** skills live here. Third-party skills are installed from their source at a
+  pinned version and listed in §5, not copied into this folder.
+- A skill change is a new agent version (`CHANGELOG.md`) and re-runs the evals.
+- What a skill does is still bound by `AGENT.md` §6: a skill can't grant permissions the agent doesn't have.
+
+---
+
 # FILE: skeleton/evals/EVAL-PLAN.md
 
 # Block 7 — Evals & Data Quality
@@ -800,7 +845,7 @@ real cases exist. This table is exported to JSONL for eval tools (`deploy/export
 # Changelog — agent versions
 
 One version = the **release unit**: prompt (`PROMPT.md`) + model + tools + memory config + I/O contract
-+ reference files (`knowledge/`). Every
++ reference files (`knowledge/`) + skills (`skills/`). Every
 trace and output carries this version (`versions.agent`). Rollback = repoint to the last version
 marked **good**. Newest at the top. Never edit an old row.
 

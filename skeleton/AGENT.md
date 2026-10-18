@@ -57,6 +57,12 @@
 - [if: runs code] **Sandbox** (rootless, capabilities dropped, read-only FS, deny-by-default network): TODO
 - [S] **Third-party tools / MCP servers / skills vetted** (source, permissions, version pinned): TODO
 
+**Skills** (own skills live in `skills/<name>/SKILL.md`; see `skills/README.md`). No skills? Replace the row's TODOs with `N/A (none)`.
+
+| Skill (`name`) | Own / third-party | What it does | Source + pinned version | Tools / data it can reach | Needs approval? | Tier |
+|----------------|-------------------|--------------|-------------------------|---------------------------|-----------------|------|
+| TODO | TODO | TODO | TODO | TODO | TODO | [if: skills] |
+
 ## 6. Controls
 *What must never happen, and who stays in control?* How-to: patterns 4, 21, O5, O10; P21, P25.
 
@@ -78,7 +84,7 @@
 - [L] **Budget enforced at:** TODO (gateway / provider) · per run TODO · per month TODO
 - [L] **Logging:** what is logged TODO · secrets and personal data redacted TODO · who can read logs TODO
 - [L] **Registry entry:** agent TODO · solution TODO · mission TODO · tier/stage TODO · owners TODO · model TODO · status TODO · **portfolio registry kept at:** TODO (outside agent-standards)
-- [L] **Version history** kept in `CHANGELOG.md`: release unit = prompt (`PROMPT.md`) + model + tools + memory config + I/O contract + reference files (`knowledge/`) (keep as is)
+- [L] **Version history** kept in `CHANGELOG.md`: release unit = prompt (`PROMPT.md`) + model + tools + memory config + I/O contract + reference files (`knowledge/`) + skills (`skills/`) (keep as is)
 - [L] **Human-decision log** (runtime approvals, rejections, edits, overrides): stored in TODO · fields: request_id, agent version, action, preview shown, decision, decided_by, time, reason, final value (keep as is) · retention TODO · access TODO
 - [S] **Edits and overrides feed evals** (`evals/GOLDEN-SET.md`): TODO (how, how often)
 - [S] **Rollout:** shadow TODO → canary TODO % → full · **rollback trigger:** TODO · **rollback method:** repoint to the last good `CHANGELOG.md` version, clear caches TODO

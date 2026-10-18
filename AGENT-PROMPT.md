@@ -21,7 +21,7 @@ Operations) and **3 golden rules** (simplest first · prompts steer, code enforc
 |------|------------|
 | `STANDARD.md` | The 8 blocks, tiers, stages, sources. Explain the standard from this page |
 | `AUDIT.md`, `CREATE.md` | Step-by-step runbooks when launched by URL ("Read <URL> and audit / create …") |
-| `skeleton/` | The template every agent starts from: `AGENT.md`, `PROMPT.md`, `io/INPUT.md`, `knowledge/`, `io/OUTPUT.md`, `evals/EVAL-PLAN.md`, `evals/GOLDEN-SET.md`, `CHANGELOG.md`, `DECISIONS.md`, `STATE.md`, `reviews/`, `_archive/` (originals after Adopt; disregarded by the agent) |
+| `skeleton/` | The template every agent starts from: `AGENT.md`, `PROMPT.md`, `io/INPUT.md`, `knowledge/`, `io/OUTPUT.md`, `skills/`, `evals/EVAL-PLAN.md`, `evals/GOLDEN-SET.md`, `CHANGELOG.md`, `DECISIONS.md`, `STATE.md`, `reviews/`, `_archive/` (originals after Adopt; disregarded by the agent) |
 | `AGENT-IO.md` | Standard input and output envelope (blocks 3–4) |
 | `deploy/audit-agent.ps1` | Completeness check per block (run it, or replicate its checks by reading the files) |
 | `deploy/audit_agent.py` | The same check in Python (same results), for tools without PowerShell such as Databricks Genie Code |
@@ -80,7 +80,8 @@ Use this when the agent's folder already has files (its own PRD, prompts, notes,
 to **merge** what the agent already knows into the skeleton, never to overwrite it or invent structure.
 1. **Inventory** every file and folder in the agent's folder (read-only). Nothing changes yet.
 2. **Propose a merge map** and show it: `existing file → skeleton target (file + section) → action`
-   (merge content / move to `knowledge/` / unknown). Wait for the user.
+   (merge content / move to `knowledge/` / unknown). Wait for the user. An existing skill file (e.g.
+   `data_engineer_skill.md`) becomes `skills/<name>/SKILL.md` with `name` in its frontmatter.
 3. **Ask** about every row marked unknown or ambiguous, and about every conflict. An existing file with a
    skeleton name (e.g. its own `AGENT.md` or `CHANGELOG.md`) is merged section by section, never
    overwritten. **If you don't know what to do with a file, ask. Don't guess.**

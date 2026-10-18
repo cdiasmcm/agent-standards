@@ -34,6 +34,8 @@ Resume here → Test the one-line AUDIT prompt from a real agent folder; set up 
 
 - 2026-10-17 — Claude — Databricks Genie Code support for the one-line audit: `deploy/audit_agent.py` (stdlib Python port of audit-agent.ps1, CLI + `run_audit()` for notebooks, same read-only guard). Verified identical reports and exit codes against the PowerShell script on 5 cases (plain skeleton, filled sample with extras and `_archive/`, Red-zone Standard/MVP, non-skeleton folder, write refusal). AUDIT.md gained a "no shell, only Python" route (Git folder → Python download to a temp folder → GitHub connector); CREATE, DEPLOY, AGENT-PROMPT, README and AGENTS updated. The real Genie Code run (egress, approvals) is still untested.
 
+- 2026-10-18 — Claude — Skills added to block 5: `skeleton/skills/README.md` (one folder per skill, `skills/<name>/SKILL.md`, Agent Skills format; folder name = frontmatter `name`), a skills table in `AGENT.md` §5 (own / third-party, source + pinned version, reach, approval), skills in the release unit. Both audit scripts check listed own skills exist, every skills/ folder has a SKILL.md, and its name matches the folder; parity verified on 5 cases. STANDARD, CREATE, AGENT-PROMPT (incl. Adopt hint), README and the bundle updated.
+
 ## Decisions
 
 <!-- Append-only. Format: - YYYY-MM-DD — decision — why -->

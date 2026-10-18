@@ -19,6 +19,7 @@ $files = @(
     'skeleton/io/INPUT.md',
     'skeleton/knowledge/README.md',
     'skeleton/io/OUTPUT.md',
+    'skeleton/skills/README.md',
     'skeleton/evals/EVAL-PLAN.md',
     'skeleton/evals/GOLDEN-SET.md',
     'skeleton/CHANGELOG.md',
