@@ -48,11 +48,13 @@ create a new agent, or audit an existing one, against our standard: **8 blocks e
 2. **Pick the workflow** from the request: **Create** (default for "create / build a new agent"),
    **Adopt** ("bring my existing agent onto the standard"), **Audit** ("check / review my agent"),
    **Gate** ("ready for pilot?"), or **Improve**.
-3. **For Create:** ask for the risk tier, copy `skeleton/` into the solution's folder, then fill the 8
-   blocks **in order, one at a time**, starting with block 1 Purpose: is this the right task to
-   automate? Wait for the user at the end of each block.
-   **For Adopt** (the folder already has files): inventory them, propose a merge map, ask about every
-   file you can't place, merge block by block, and move originals to `_archive/` only after the user
+3. **Ask only critical questions, in one short list** (never block by block): what only the user
+   knows, what decides go/no-go or the tier, and what could lose data. Decide the rest yourself, mark
+   guesses `(assumed)`, and show one summary at the end.
+   **For Create:** copy `skeleton/` into the solution's folder, ask the critical questions (owners,
+   §1 Purpose, §6 reviewers and must-never), set the tier from the risk facts, and draft every other block.
+   **For Adopt** (the folder already has files): inventory them, propose a merge map, ask only about
+   files you can't place and conflicts, merge, and move originals to `_archive/` only after the user
    approves. Never create folders that aren't in `skeleton/` (AGENT-PROMPT, workflow 2).
 4. **For Audit:** run `deploy/audit-agent.ps1 -Path <agent folder>` (or apply its checks by reading the
    files), then review each block's quality and list what's missing.
@@ -168,7 +170,9 @@ Prompt that brought you here:
 ## Rules (apply to every step)
 - **agent-standards is a read-only framework.** Never modify, commit to, or write files inside it.
 - Everything you create goes into the **new agent's folder**.
-- Go one block at a time and wait for the user at the end of each. Don't jump ahead to architecture.
+- **Ask only critical questions** (rule in `AGENT-PROMPT.md`): only what the user alone knows, what
+  decides go/no-go or the tier, or what could lose data. Ask them in one short list, never block by
+  block. Decide the rest yourself and mark guesses `(assumed)`.
 
 ## Step 1. Get the framework (read-only)
 Same as `AUDIT.md` step 1: use an existing clone (`git pull`), or
@@ -199,7 +203,8 @@ The fields marked _(you)_ in `AGENT.md`. Keep it short.
    must-never list and get it confirmed.
 
 ## Step 4. Draft the rest, then show it for adjustment
-Fill these yourself; fields above the tier get `N/A (tier)`. Show each block and let the user adjust.
+Fill these yourself without asking; fields above the tier get `N/A (tier)`. Mark guesses `(assumed)`.
+Show everything once, in step 5.
 - **2 Steps** (`AGENT.md` §2): one agent first; challenge every step tagged "agent". Then write the
    rest of `PROMPT.md` (system prompt, how to hand work to a human, examples).
 - **3 Input** (`io/INPUT.md`): ask for any reference files the agent must follow (naming conventions,
@@ -215,8 +220,8 @@ Fill these yourself; fields above the tier get `N/A (tier)`. Show each block and
    `CHANGELOG.md` entry and a `STATE.md` "Resume here".
 
 ## Step 5. Check and show
-Run the audit on the new folder (`AUDIT.md` steps 3–5). Show the user the block table and what's still
-open, and save the report in `<agent folder>/reviews/`.
+Run the audit on the new folder (`AUDIT.md` steps 3–5). Show the user, once: the block table, every
+`(assumed)` item to confirm or change, and what's still open. Save the report in `<agent folder>/reviews/`.
 
 ---
 
@@ -273,7 +278,8 @@ at MVP, 100 at Pilot, 300 at Scale) and is passed through a gate recorded in `CH
 
 ## Using it
 - **New agent:** "Read START-HERE.md and create a new agent for <problem>". The advisor copies the
-  skeleton and fills blocks 1 → 8 with you, one at a time.
+  skeleton, asks only the critical questions (in one list), drafts every block and shows you one
+  summary to adjust.
 - **Existing agent:** run `deploy/audit-agent.ps1 <agent folder>` for a block-by-block gap report,
   then ask the advisor for the judgment review. To bring it onto the skeleton, the advisor runs
   **Adopt**: it merges the agent's existing files into the skeleton (asking about any file it can't
@@ -383,7 +389,8 @@ if the folder already holds the agent's files, it's **Adopt**.
      tier yourself** from the risk facts (rule in `AGENT.md` §1) and tell the user which tier and why.
      Write the job sentence as the Role in `PROMPT.md`, and the north star in `evals/EVAL-PLAN.md`.
    - **6 Controls:** who reviews which action and how long they can wait; confirm the must-never list you propose.
-4. **Draft everything else yourself** and show it block by block for the user to adjust: **2 Steps**
+4. **Draft everything else yourself** without asking per block, then show one summary at the end (block
+   table + `(assumed)` items) for the user to adjust: **2 Steps**
    (one agent first; challenge every "agent" step), **3 Input**, **4 Output**, **5 Tools & Access**,
    **7 Evals & DQ** (a first golden-set row from the dry-run plan), **8 Operations** (sensible defaults),
    and the rest of `PROMPT.md`. Fields above the tier are marked `N/A (tier)`. Record the model choice
@@ -397,14 +404,15 @@ Use this when the agent's folder already has files (its own PRD, prompts, notes,
 to **merge** what the agent already knows into the skeleton, never to overwrite it or invent structure.
 1. **Inventory** every file and folder in the agent's folder (read-only). Nothing changes yet.
 2. **Propose a merge map** and show it: `existing file → skeleton target (file + section) → action`
-   (merge content / move to `knowledge/` / unknown). Wait for the user. An existing skill file (e.g.
+   (merge content / move to `knowledge/` / unknown). Get one confirmation for the whole map. An existing skill file (e.g.
    `data_engineer_skill.md`) becomes `skills/<name>/SKILL.md` with `name` in its frontmatter.
 3. **Ask** about every row marked unknown or ambiguous, and about every conflict. An existing file with a
    skeleton name (e.g. its own `AGENT.md` or `CHANGELOG.md`) is merged section by section, never
    overwritten. **If you don't know what to do with a file, ask. Don't guess.**
 4. Copy in the skeleton files that don't exist yet (including `.gitignore`; an existing `.gitignore` gets
    the skeleton's lines added, never replaced), then merge content into them **block by block**,
-   confirming each block as in Create. Mark merged fields with `(from <original path>)`.
+   without asking per block. Mark merged fields with `(from <original path>)` and guesses with
+   `(assumed)`; show them in the end summary.
 5. Copy each merged original into `_archive/YYYY-MM-DD-pre-standard/` (same relative path) and log it in
    `_archive/README.md`. Remove originals from their old place **only after the user approves the list**.
 6. **Never create folders that aren't part of the skeleton.** A file the user wants to keep active gets a
@@ -446,6 +454,12 @@ maintainer reviews proposals and decides whether to change the standard.
 - Simplest first: push back on extra agents as firmly as on mega-agents.
 - Security fields (trifecta, guardrails, kill switch) are never N/A for a user-facing agent with data access.
 - Paraphrase the sources; quote at most a short phrase.
+- **Ask only critical questions.** Never walk the user through the blocks one by one. Ask only when the
+  answer (a) is something only the user knows (owners, the problem, whether people want it automated,
+  reviewers, must-never), (b) decides go/no-go or the tier (risk facts, blockers), or (c) could lose or
+  overwrite something (a file you can't place, a merge conflict, removing originals). Ask them together,
+  in one short list. Decide everything else yourself, mark each guess `(assumed)` in the file, and show
+  one summary at the end (block table + assumptions) for the user to adjust.
 - **The framework is read-only.** Nothing about any agent is ever written to the standards root.
 - **In an agent's folder, only skeleton folders.** Never create a folder that isn't in `skeleton/`.
   Merge, never overwrite. A file you can't place: ask the user.

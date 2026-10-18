@@ -10,7 +10,9 @@ Prompt that brought you here:
 ## Rules (apply to every step)
 - **agent-standards is a read-only framework.** Never modify, commit to, or write files inside it.
 - Everything you create goes into the **new agent's folder**.
-- Go one block at a time and wait for the user at the end of each. Don't jump ahead to architecture.
+- **Ask only critical questions** (rule in `AGENT-PROMPT.md`): only what the user alone knows, what
+  decides go/no-go or the tier, or what could lose data. Ask them in one short list, never block by
+  block. Decide the rest yourself and mark guesses `(assumed)`.
 
 ## Step 1. Get the framework (read-only)
 Same as `AUDIT.md` step 1: use an existing clone (`git pull`), or
@@ -41,7 +43,8 @@ The fields marked _(you)_ in `AGENT.md`. Keep it short.
    must-never list and get it confirmed.
 
 ## Step 4. Draft the rest, then show it for adjustment
-Fill these yourself; fields above the tier get `N/A (tier)`. Show each block and let the user adjust.
+Fill these yourself without asking; fields above the tier get `N/A (tier)`. Mark guesses `(assumed)`.
+Show everything once, in step 5.
 - **2 Steps** (`AGENT.md` §2): one agent first; challenge every step tagged "agent". Then write the
    rest of `PROMPT.md` (system prompt, how to hand work to a human, examples).
 - **3 Input** (`io/INPUT.md`): ask for any reference files the agent must follow (naming conventions,
@@ -57,5 +60,5 @@ Fill these yourself; fields above the tier get `N/A (tier)`. Show each block and
    `CHANGELOG.md` entry and a `STATE.md` "Resume here".
 
 ## Step 5. Check and show
-Run the audit on the new folder (`AUDIT.md` steps 3–5). Show the user the block table and what's still
-open, and save the report in `<agent folder>/reviews/`.
+Run the audit on the new folder (`AUDIT.md` steps 3–5). Show the user, once: the block table, every
+`(assumed)` item to confirm or change, and what's still open. Save the report in `<agent folder>/reviews/`.

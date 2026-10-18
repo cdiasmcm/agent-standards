@@ -40,6 +40,8 @@ Resume here → Test the one-line AUDIT prompt from a real agent folder; set up 
 
 - 2026-10-18 — Claude — Simplified `skeleton/AGENT.md` (77 → 59 lines; fields to fill Lite 37 → 19, Standard 48 → 21, Critical 50 → 22; still 4 tables). Each fact now lives in one file: job → `PROMPT.md` Role; north star → `evals/EVAL-PLAN.md`; model choice, agent splits and autonomy history → `DECISIONS.md`; version → `CHANGELOG.md`; "tools are distinct" and the OWASP check → audit judgment review; fixed rules → an untagged footer. Tools and skills merged into one table; one Human checkpoints table replaces three H-level/approval columns; one Data table for trace store, decision log and logs. User input only where marked _(you)_ (owners, §1 Purpose, §6 reviewers and must-never); the tier is derived from §1 risk facts. Both audits read the merged table; parity verified on 4 cases. CREATE, AGENT-PROMPT, AUDIT, STANDARD, FRAMEWORK, PATTERNS, skills/README updated.
 
+- 2026-10-18 — Claude — "Ask only critical questions" rule (AGENT-PROMPT Rules): questions only for what the user alone knows, what decides go/no-go or the tier, or what could lose data; asked together in one list; everything else decided by the AI, guesses marked `(assumed)`, one summary at the end. Create and Adopt no longer confirm block by block. CREATE, START-HERE, SKILL, STANDARD and the local Claude skill updated.
+
 ## Decisions
 
 <!-- Append-only. Format: - YYYY-MM-DD — decision — why -->
@@ -49,6 +51,7 @@ Resume here → Test the one-line AUDIT prompt from a real agent folder; set up 
 - 2026-10-16 — Book text is paraphrased, with our own adjustments marked "Our rule" — keeps the book's view and ours apart, and respects copyright.
 - 2026-10-16 — Context-rot threshold (~100K in the book) is treated as model-specific and measured with evals — the book is dated Oct 2025 and models have changed since.
 - 2026-10-16 — Every solution is decomposed with FRAMEWORK D1–D7 before any build; steps are tagged C/L/W/A/H and only A steps become agents — the owner wants each agent to solve one problem at a time; the simplest-level rule follows Anthropic's *Building Effective Agents* (the book's source for pattern 2).
+- 2026-10-18 — No block-by-block questioning when creating, adopting or evaluating agents: critical questions only, in one list — the owner finds per-block questions slow.
 - 2026-10-18 — The user only fills what nobody else knows (owners, Purpose, reviewers and must-never); the AI derives the tier and drafts every other block for later adjustment — the owner wants AGENT.md easy to use with few blocks to update. Each fact lives in exactly one file.
 - 2026-10-18 — Local run data lives in a git-ignored `runs/` inside the agent folder (owner's choice over keeping it outside the folder); production never writes back to the repo — changes flow dev → git → gate → deploy only.
 - 2026-10-17 — Existing agents are merged into the skeleton (Adopt), never overwritten; no folders outside the skeleton; unplaceable files are asked about; originals go to `_archive/`, which the agent disregards — the owner's rules for applying the framework to agents that already have files.

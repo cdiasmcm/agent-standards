@@ -69,7 +69,8 @@ if the folder already holds the agent's files, it's **Adopt**.
      tier yourself** from the risk facts (rule in `AGENT.md` §1) and tell the user which tier and why.
      Write the job sentence as the Role in `PROMPT.md`, and the north star in `evals/EVAL-PLAN.md`.
    - **6 Controls:** who reviews which action and how long they can wait; confirm the must-never list you propose.
-4. **Draft everything else yourself** and show it block by block for the user to adjust: **2 Steps**
+4. **Draft everything else yourself** without asking per block, then show one summary at the end (block
+   table + `(assumed)` items) for the user to adjust: **2 Steps**
    (one agent first; challenge every "agent" step), **3 Input**, **4 Output**, **5 Tools & Access**,
    **7 Evals & DQ** (a first golden-set row from the dry-run plan), **8 Operations** (sensible defaults),
    and the rest of `PROMPT.md`. Fields above the tier are marked `N/A (tier)`. Record the model choice
@@ -83,14 +84,15 @@ Use this when the agent's folder already has files (its own PRD, prompts, notes,
 to **merge** what the agent already knows into the skeleton, never to overwrite it or invent structure.
 1. **Inventory** every file and folder in the agent's folder (read-only). Nothing changes yet.
 2. **Propose a merge map** and show it: `existing file → skeleton target (file + section) → action`
-   (merge content / move to `knowledge/` / unknown). Wait for the user. An existing skill file (e.g.
+   (merge content / move to `knowledge/` / unknown). Get one confirmation for the whole map. An existing skill file (e.g.
    `data_engineer_skill.md`) becomes `skills/<name>/SKILL.md` with `name` in its frontmatter.
 3. **Ask** about every row marked unknown or ambiguous, and about every conflict. An existing file with a
    skeleton name (e.g. its own `AGENT.md` or `CHANGELOG.md`) is merged section by section, never
    overwritten. **If you don't know what to do with a file, ask. Don't guess.**
 4. Copy in the skeleton files that don't exist yet (including `.gitignore`; an existing `.gitignore` gets
    the skeleton's lines added, never replaced), then merge content into them **block by block**,
-   confirming each block as in Create. Mark merged fields with `(from <original path>)`.
+   without asking per block. Mark merged fields with `(from <original path>)` and guesses with
+   `(assumed)`; show them in the end summary.
 5. Copy each merged original into `_archive/YYYY-MM-DD-pre-standard/` (same relative path) and log it in
    `_archive/README.md`. Remove originals from their old place **only after the user approves the list**.
 6. **Never create folders that aren't part of the skeleton.** A file the user wants to keep active gets a
@@ -132,6 +134,12 @@ maintainer reviews proposals and decides whether to change the standard.
 - Simplest first: push back on extra agents as firmly as on mega-agents.
 - Security fields (trifecta, guardrails, kill switch) are never N/A for a user-facing agent with data access.
 - Paraphrase the sources; quote at most a short phrase.
+- **Ask only critical questions.** Never walk the user through the blocks one by one. Ask only when the
+  answer (a) is something only the user knows (owners, the problem, whether people want it automated,
+  reviewers, must-never), (b) decides go/no-go or the tier (risk facts, blockers), or (c) could lose or
+  overwrite something (a file you can't place, a merge conflict, removing originals). Ask them together,
+  in one short list. Decide everything else yourself, mark each guess `(assumed)` in the file, and show
+  one summary at the end (block table + assumptions) for the user to adjust.
 - **The framework is read-only.** Nothing about any agent is ever written to the standards root.
 - **In an agent's folder, only skeleton folders.** Never create a folder that isn't in `skeleton/`.
   Merge, never overwrite. A file you can't place: ask the user.

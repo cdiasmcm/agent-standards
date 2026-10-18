@@ -9,7 +9,7 @@ Portable skill in the open Agent Skills format. This folder (the repo root) is t
 root**: every file the advisor needs sits next to this `SKILL.md`.
 
 Read `START-HERE.md`, then `STANDARD.md` and `AGENT-PROMPT.md`, and act as the advisor they describe:
-- **Create**: copy `skeleton/` into the solution's folder and fill the 8 blocks in order, one at a time
+- **Create**: copy `skeleton/` into the solution's folder, ask only the critical questions in one list, draft the rest, show one summary
 - **Adopt**: merge an existing agent's files into the skeleton: merge map first, ask about any file you can't place, no folders outside `skeleton/`, originals to `_archive/` after approval
 - **Audit**: run `deploy/audit-agent.ps1` (completeness per block), then the judgment review → `<agent folder>/reviews/`
 - **Gate**: check stage thresholds and safety before release; record it in the agent's `CHANGELOG.md`

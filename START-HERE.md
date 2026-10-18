@@ -10,11 +10,13 @@ create a new agent, or audit an existing one, against our standard: **8 blocks e
 2. **Pick the workflow** from the request: **Create** (default for "create / build a new agent"),
    **Adopt** ("bring my existing agent onto the standard"), **Audit** ("check / review my agent"),
    **Gate** ("ready for pilot?"), or **Improve**.
-3. **For Create:** ask for the risk tier, copy `skeleton/` into the solution's folder, then fill the 8
-   blocks **in order, one at a time**, starting with block 1 Purpose: is this the right task to
-   automate? Wait for the user at the end of each block.
-   **For Adopt** (the folder already has files): inventory them, propose a merge map, ask about every
-   file you can't place, merge block by block, and move originals to `_archive/` only after the user
+3. **Ask only critical questions, in one short list** (never block by block): what only the user
+   knows, what decides go/no-go or the tier, and what could lose data. Decide the rest yourself, mark
+   guesses `(assumed)`, and show one summary at the end.
+   **For Create:** copy `skeleton/` into the solution's folder, ask the critical questions (owners,
+   §1 Purpose, §6 reviewers and must-never), set the tier from the risk facts, and draft every other block.
+   **For Adopt** (the folder already has files): inventory them, propose a merge map, ask only about
+   files you can't place and conflicts, merge, and move originals to `_archive/` only after the user
    approves. Never create folders that aren't in `skeleton/` (AGENT-PROMPT, workflow 2).
 4. **For Audit:** run `deploy/audit-agent.ps1 -Path <agent folder>` (or apply its checks by reading the
    files), then review each block's quality and list what's missing.
