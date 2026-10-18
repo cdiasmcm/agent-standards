@@ -37,7 +37,8 @@ Prompt that brought you here:
 - Read `STANDARD.md` (the 8 blocks), then the **Audit** workflow in `AGENT-PROMPT.md`.
 
 ## Step 2. Identify the agent
-The agent folder is the current working directory, unless the user named another one. In a notebook
+The agent folder is the current working directory, unless the user named another one. Never create a
+folder for the agent. In a notebook
 tool (e.g. Genie Code), it's the folder of the open notebook or file; if that's unclear, ask for the
 workspace path (e.g. `/Workspace/Users/<you>/my-agent`). If the folder
 holds several agents, list them and ask which one to audit (or audit each).

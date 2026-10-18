@@ -51,7 +51,8 @@ create a new agent, or audit an existing one, against our standard: **8 blocks e
 3. **Ask only critical questions, in one short list** (never block by block): what only the user
    knows, what decides go/no-go or the tier, and what could lose data. Decide the rest yourself, mark
    guesses `(assumed)`, and show one summary at the end.
-   **For Create:** copy `skeleton/` into the solution's folder, ask the critical questions (owners,
+   **For Create:** copy the contents of `skeleton/` into the folder you were started in (in place,
+   never a new subfolder for the agent), ask the critical questions (owners,
    §1 Purpose, §6 reviewers and must-never), set the tier from the risk facts, and draft every other block.
    **For Adopt** (the folder already has files): inventory them, propose a merge map, ask only about
    files you can't place and conflicts, merge, and move originals to `_archive/` only after the user
@@ -112,7 +113,8 @@ Prompt that brought you here:
 - Read `STANDARD.md` (the 8 blocks), then the **Audit** workflow in `AGENT-PROMPT.md`.
 
 ## Step 2. Identify the agent
-The agent folder is the current working directory, unless the user named another one. In a notebook
+The agent folder is the current working directory, unless the user named another one. Never create a
+folder for the agent. In a notebook
 tool (e.g. Genie Code), it's the folder of the open notebook or file; if that's unclear, ask for the
 workspace path (e.g. `/Workspace/Users/<you>/my-agent`). If the folder
 holds several agents, list them and ask which one to audit (or audit each).
@@ -182,12 +184,16 @@ step 1, and also download the `skeleton/` files you need.
 Read `STANDARD.md`, then the **Create** workflow in `AGENT-PROMPT.md`.
 
 ## Step 2. Set up the folder
-1. Restate the problem in one sentence and ask for: the agent's name, where its folder should go
-   (default: a new folder in the current directory), and the business and tech owners. Don't ask for
-   the tier: you set it from the risk facts in step 3.
-2. If `<agent folder>` already has files, **stop**: this is an existing agent. Switch to the **Adopt**
-   workflow in `AGENT-PROMPT.md` (merge, never overwrite) and tell the user.
-   Otherwise copy the framework's `skeleton/` folder to `<agent folder>/`, **including dot-files**
+1. **The agent folder is the folder you were started in** (in a notebook tool: the folder of the open
+   notebook or file). Work there, in place: **never create a subfolder for the agent** and never invent
+   a folder name. Use another folder only if the user names one.
+   Restate the problem in one sentence and ask for the agent's name (it goes in the `# Agent:` heading,
+   not a folder name) and the business and tech owners. Don't ask for the tier: you set it from the
+   risk facts in step 3.
+2. If the agent folder already has files, **stop**: this is an existing agent. Switch to the **Adopt**
+   workflow in `AGENT-PROMPT.md` (merge in place, never overwrite) and tell the user.
+   Otherwise copy the **contents** of the framework's `skeleton/` folder straight into the agent folder
+   (`AGENT.md` lands next to where you were started, not in a new subfolder), **including dot-files**
    (`.gitignore` keeps per-request run data in `runs/` out of every commit; `cp skeleton/*` misses it). If you can't write files, output each
    skeleton file as a Markdown block with its path.
 3. Set `Stage: Design` and the owners in `AGENT.md`.
@@ -221,7 +227,7 @@ Show everything once, in step 5.
    `CHANGELOG.md` entry and a `STATE.md` "Resume here".
 
 ## Step 5. Check and show
-Run the audit on the new folder (`AUDIT.md` steps 3–5). Show the user, once: the block table, every
+Run the audit on the agent folder (`AUDIT.md` steps 3–5). Show the user, once: the block table, every
 `(assumed)` item to confirm or change, and what's still open. Save the report in `<agent folder>/reviews/`.
 
 ---
@@ -278,8 +284,8 @@ otherwise Lite).
 at MVP, 100 at Pilot, 300 at Scale) and is passed through a gate recorded in `CHANGELOG.md`.
 
 ## Using it
-- **New agent:** "Read START-HERE.md and create a new agent for <problem>". The advisor copies the
-  skeleton, asks only the critical questions (in one list), drafts every block and shows you one
+- **New agent:** "Read START-HERE.md and create a new agent for <problem>". Run it in the agent's
+  folder: the advisor copies the skeleton there (no new subfolder), asks only the critical questions (in one list), drafts every block and shows you one
   summary to adjust.
 - **Existing agent:** run `deploy/audit-agent.ps1 <agent folder>` for a block-by-block gap report,
   then ask the advisor for the judgment review. To bring it onto the skeleton, the advisor runs
@@ -380,8 +386,10 @@ Ask which one the user wants if it isn't clear. Default for "create / build a ne
 if the folder already holds the agent's files, it's **Adopt**.
 
 ### 1. Create: a new agent
-1. Ask where the solution's folder is and who the business and tech owners are.
-2. Copy `skeleton/` to `<solution folder>/<agent-name>/`, including its dot-files (`.gitignore`, which keeps
+1. Ask who the business and tech owners are. The agent's name goes in the `# Agent:` heading, never in a
+   folder name.
+2. Copy the **contents** of `skeleton/` into the agent folder, the folder you were started in (in place,
+   no subfolder), including its dot-files (`.gitignore`, which keeps
    per-request data in `runs/` out of commits). If you can't write files, output each file as
    a Markdown block with its path.
 3. **Ask the user only for what nobody else knows** (the fields marked _(you)_):
@@ -402,7 +410,8 @@ if the folder already holds the agent's files, it's **Adopt**.
 
 ### 2. Adopt: bring an existing agent onto the skeleton
 Use this when the agent's folder already has files (its own PRD, prompts, notes, scripts…). The goal is
-to **merge** what the agent already knows into the skeleton, never to overwrite it or invent structure.
+to **merge** what the agent already knows into the skeleton, **in place in that folder**, never to
+overwrite it or invent structure.
 1. **Inventory** every file and folder in the agent's folder (read-only). Nothing changes yet.
 2. **Propose a merge map** and show it: `existing file → skeleton target (file + section) → action`
    (merge content / move to `knowledge/` / unknown). Get one confirmation for the whole map. An existing skill file (e.g.
@@ -465,6 +474,10 @@ maintainer reviews proposals and decides whether to change the standard.
   in one short list. Decide everything else yourself, mark each guess `(assumed)` in the file, and show
   one summary at the end (block table + assumptions) for the user to adjust.
 - **The framework is read-only.** Nothing about any agent is ever written to the standards root.
+- **The agent folder is the folder you were started in** (the current directory or, in a notebook tool,
+  the folder of the open notebook or file). Apply the skeleton there, in place. Never create a
+  subfolder for the agent and never invent a folder name. Use another folder only if the user names it
+  (e.g. a solution holding several agents). If the folder already has files, run Adopt, not Create.
 - **In an agent's folder, only skeleton folders.** Never create a folder that isn't in `skeleton/`.
   Merge, never overwrite. A file you can't place: ask the user.
 - After each completed workflow, append one dated line to the **agent's** `STATE.md` (Log).

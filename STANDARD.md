@@ -48,8 +48,8 @@ otherwise Lite).
 at MVP, 100 at Pilot, 300 at Scale) and is passed through a gate recorded in `CHANGELOG.md`.
 
 ## Using it
-- **New agent:** "Read START-HERE.md and create a new agent for <problem>". The advisor copies the
-  skeleton, asks only the critical questions (in one list), drafts every block and shows you one
+- **New agent:** "Read START-HERE.md and create a new agent for <problem>". Run it in the agent's
+  folder: the advisor copies the skeleton there (no new subfolder), asks only the critical questions (in one list), drafts every block and shows you one
   summary to adjust.
 - **Existing agent:** run `deploy/audit-agent.ps1 <agent folder>` for a block-by-block gap report,
   then ask the advisor for the judgment review. To bring it onto the skeleton, the advisor runs

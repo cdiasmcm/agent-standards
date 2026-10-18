@@ -59,8 +59,10 @@ Ask which one the user wants if it isn't clear. Default for "create / build a ne
 if the folder already holds the agent's files, it's **Adopt**.
 
 ### 1. Create: a new agent
-1. Ask where the solution's folder is and who the business and tech owners are.
-2. Copy `skeleton/` to `<solution folder>/<agent-name>/`, including its dot-files (`.gitignore`, which keeps
+1. Ask who the business and tech owners are. The agent's name goes in the `# Agent:` heading, never in a
+   folder name.
+2. Copy the **contents** of `skeleton/` into the agent folder, the folder you were started in (in place,
+   no subfolder), including its dot-files (`.gitignore`, which keeps
    per-request data in `runs/` out of commits). If you can't write files, output each file as
    a Markdown block with its path.
 3. **Ask the user only for what nobody else knows** (the fields marked _(you)_):
@@ -81,7 +83,8 @@ if the folder already holds the agent's files, it's **Adopt**.
 
 ### 2. Adopt: bring an existing agent onto the skeleton
 Use this when the agent's folder already has files (its own PRD, prompts, notes, scripts…). The goal is
-to **merge** what the agent already knows into the skeleton, never to overwrite it or invent structure.
+to **merge** what the agent already knows into the skeleton, **in place in that folder**, never to
+overwrite it or invent structure.
 1. **Inventory** every file and folder in the agent's folder (read-only). Nothing changes yet.
 2. **Propose a merge map** and show it: `existing file → skeleton target (file + section) → action`
    (merge content / move to `knowledge/` / unknown). Get one confirmation for the whole map. An existing skill file (e.g.
@@ -144,6 +147,10 @@ maintainer reviews proposals and decides whether to change the standard.
   in one short list. Decide everything else yourself, mark each guess `(assumed)` in the file, and show
   one summary at the end (block table + assumptions) for the user to adjust.
 - **The framework is read-only.** Nothing about any agent is ever written to the standards root.
+- **The agent folder is the folder you were started in** (the current directory or, in a notebook tool,
+  the folder of the open notebook or file). Apply the skeleton there, in place. Never create a
+  subfolder for the agent and never invent a folder name. Use another folder only if the user names it
+  (e.g. a solution holding several agents). If the folder already has files, run Adopt, not Create.
 - **In an agent's folder, only skeleton folders.** Never create a folder that isn't in `skeleton/`.
   Merge, never overwrite. A file you can't place: ask the user.
 - After each completed workflow, append one dated line to the **agent's** `STATE.md` (Log).

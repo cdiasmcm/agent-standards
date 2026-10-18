@@ -22,12 +22,16 @@ step 1, and also download the `skeleton/` files you need.
 Read `STANDARD.md`, then the **Create** workflow in `AGENT-PROMPT.md`.
 
 ## Step 2. Set up the folder
-1. Restate the problem in one sentence and ask for: the agent's name, where its folder should go
-   (default: a new folder in the current directory), and the business and tech owners. Don't ask for
-   the tier: you set it from the risk facts in step 3.
-2. If `<agent folder>` already has files, **stop**: this is an existing agent. Switch to the **Adopt**
-   workflow in `AGENT-PROMPT.md` (merge, never overwrite) and tell the user.
-   Otherwise copy the framework's `skeleton/` folder to `<agent folder>/`, **including dot-files**
+1. **The agent folder is the folder you were started in** (in a notebook tool: the folder of the open
+   notebook or file). Work there, in place: **never create a subfolder for the agent** and never invent
+   a folder name. Use another folder only if the user names one.
+   Restate the problem in one sentence and ask for the agent's name (it goes in the `# Agent:` heading,
+   not a folder name) and the business and tech owners. Don't ask for the tier: you set it from the
+   risk facts in step 3.
+2. If the agent folder already has files, **stop**: this is an existing agent. Switch to the **Adopt**
+   workflow in `AGENT-PROMPT.md` (merge in place, never overwrite) and tell the user.
+   Otherwise copy the **contents** of the framework's `skeleton/` folder straight into the agent folder
+   (`AGENT.md` lands next to where you were started, not in a new subfolder), **including dot-files**
    (`.gitignore` keeps per-request run data in `runs/` out of every commit; `cp skeleton/*` misses it). If you can't write files, output each
    skeleton file as a Markdown block with its path.
 3. Set `Stage: Design` and the owners in `AGENT.md`.
@@ -61,5 +65,5 @@ Show everything once, in step 5.
    `CHANGELOG.md` entry and a `STATE.md` "Resume here".
 
 ## Step 5. Check and show
-Run the audit on the new folder (`AUDIT.md` steps 3–5). Show the user, once: the block table, every
+Run the audit on the agent folder (`AUDIT.md` steps 3–5). Show the user, once: the block table, every
 `(assumed)` item to confirm or change, and what's still open. Save the report in `<agent folder>/reviews/`.

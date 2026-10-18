@@ -44,6 +44,8 @@ Resume here → Test the one-line AUDIT prompt from a real agent folder; set up 
 
 - 2026-10-18 — Claude — Steps moved out of AGENT.md: `PROMPT.md` gained `## Steps` (numbered list, each step starting with its level `C`/`L`/`W`/`A`/`H`; the only place steps are written); `AGENT.md` §2 is now "Limits" (done when, caps, escalation, agents/topology). Both audits flag unwritten steps in PROMPT.md and an old-layout steps table left in AGENT.md §2; parity verified on 3 cases. Create, Adopt (old steps → PROMPT.md Steps), Audit, CREATE, STANDARD and FRAMEWORK D3 updated.
 
+- 2026-10-18 — Claude — Skeleton is applied in place: a Databricks test from `fit-gap` created an unwanted `fit-gap/schema-mapper/` because Create said "copy to `<solution folder>/<agent-name>/`" and CREATE defaulted to "a new folder". New rule (AGENT-PROMPT Rules): the agent folder is the folder the session started in (or the open notebook's folder); never create a subfolder or invent a folder name; a folder with files means Adopt in place. CREATE, START-HERE, SKILL, STANDARD, AUDIT and the local Claude skill updated.
+
 ## Decisions
 
 <!-- Append-only. Format: - YYYY-MM-DD — decision — why -->
@@ -53,6 +55,7 @@ Resume here → Test the one-line AUDIT prompt from a real agent folder; set up 
 - 2026-10-16 — Book text is paraphrased, with our own adjustments marked "Our rule" — keeps the book's view and ours apart, and respects copyright.
 - 2026-10-16 — Context-rot threshold (~100K in the book) is treated as model-specific and measured with evals — the book is dated Oct 2025 and models have changed since.
 - 2026-10-16 — Every solution is decomposed with FRAMEWORK D1–D7 before any build; steps are tagged C/L/W/A/H and only A steps become agents — the owner wants each agent to solve one problem at a time; the simplest-level rule follows Anthropic's *Building Effective Agents* (the book's source for pattern 2).
+- 2026-10-18 — The agent folder is where the session starts; the skeleton is applied in place, never in a new subfolder — the owner works from the agent's own folder (Databricks test, fit-gap).
 - 2026-10-18 — No block-by-block questioning when creating, adopting or evaluating agents: critical questions only, in one list — the owner finds per-block questions slow.
 - 2026-10-18 — The user only fills what nobody else knows (owners, Purpose, reviewers and must-never); the AI derives the tier and drafts every other block for later adjustment — the owner wants AGENT.md easy to use with few blocks to update. Each fact lives in exactly one file.
 - 2026-10-18 — Local run data lives in a git-ignored `runs/` inside the agent folder (owner's choice over keeping it outside the folder); production never writes back to the repo — changes flow dev → git → gate → deploy only.

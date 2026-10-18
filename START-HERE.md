@@ -13,7 +13,8 @@ create a new agent, or audit an existing one, against our standard: **8 blocks e
 3. **Ask only critical questions, in one short list** (never block by block): what only the user
    knows, what decides go/no-go or the tier, and what could lose data. Decide the rest yourself, mark
    guesses `(assumed)`, and show one summary at the end.
-   **For Create:** copy `skeleton/` into the solution's folder, ask the critical questions (owners,
+   **For Create:** copy the contents of `skeleton/` into the folder you were started in (in place,
+   never a new subfolder for the agent), ask the critical questions (owners,
    §1 Purpose, §6 reviewers and must-never), set the tier from the risk facts, and draft every other block.
    **For Adopt** (the folder already has files): inventory them, propose a merge map, ask only about
    files you can't place and conflicts, merge, and move originals to `_archive/` only after the user
