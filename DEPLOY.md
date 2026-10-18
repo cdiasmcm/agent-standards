@@ -23,9 +23,20 @@ a GitHub credential linked in Databricks (*User settings → Linked accounts →
    *Untested:* if Databricks won't create a Git folder there, put it anywhere in your home folder. The
    `@START-HERE.md` launch still works, and `AGENTS.md` is picked up when you work inside that folder.
 3. Open Genie Code (Agent mode), type `@START-HERE.md create a new agent for <problem>`, and check it
-   asks for the tier and starts block 1 (Purpose). The `deploy/*.ps1` scripts are PowerShell and won't run
-   in Databricks: there, the advisor applies the audit checks by reading the files (AGENT-PROMPT, Audit).
+   asks for the tier and starts block 1 (Purpose).
 4. **To update:** open the Git folder → **Pull**.
+
+**Audit in Genie Code.** Open a notebook or file in the agent's folder and use the same one-liner as
+anywhere else: *"Read https://raw.githubusercontent.com/cdiasmcm/agent-standards/main/AUDIT.md and audit
+this agent for me."* (or, with the Git folder, `@AUDIT.md audit this agent`). Genie Code runs Python but
+not PowerShell, so it uses `deploy/audit_agent.py`, the Python version of the audit with the same result.
+
+*Untested in Databricks so far:*
+- Genie Code has no documented tool for opening a URL. It can download the files by running a Python
+  cell, if your workspace allows outbound HTTP (serverless network policies may block it).
+- If downloads are blocked, the **Git folder** route (steps 1–2) always works, because the files are
+  already in the workspace.
+- Web search in Genie Code is a Beta feature that an admin turns on, and it isn't needed here.
 
 Outputs Genie Code creates (agent skeletons, audit reports) live in your Databricks workspace. Commit
 them from the Git folder, or save them in the solution's own folder.

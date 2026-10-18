@@ -29,6 +29,8 @@ Create, Audit or Gate. Feedback from those workflows arrives as a proposal file 
 - A change to a block must stay consistent across `STANDARD.md`, `skeleton/`, `deploy/audit-agent.ps1`
   (headings, tier tags, `TODO` markers) and the library file for that block. Test with
   `deploy/audit-agent.ps1 -Path skeleton`, which should report every block as not started.
+- `deploy/audit-agent.ps1` and `deploy/audit_agent.py` are the same audit in two languages. Change both
+  together, and check they print the same report on the same folders.
 - Log every framework change in `STATE.md`, and record lasting choices under Decisions with the reason.
   Never edit old entries. Never log work on other agents here.
 - After changing the standard: run `deploy/build-bundle.ps1`, then commit and push. The repo is the

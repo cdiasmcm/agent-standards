@@ -14,7 +14,9 @@ Prompt that brought you here:
 
 ## Step 1. Get the framework (read-only)
 Same as `AUDIT.md` step 1: use an existing clone (`git pull`), or
-`git clone https://github.com/cdiasmcm/agent-standards ~/.agent-standards`, or read the raw files.
+`git clone https://github.com/cdiasmcm/agent-standards ~/.agent-standards`, or read the raw files. In a
+tool with no shell (e.g. Databricks Genie Code), use the "No shell, only Python" route in `AUDIT.md`
+step 1, and also download the `skeleton/` files you need.
 Read `STANDARD.md`, then the **Create** workflow in `AGENT-PROMPT.md`.
 
 ## Step 2. Set up the folder

@@ -32,6 +32,8 @@ Resume here → Test the one-line AUDIT prompt from a real agent folder; set up 
 
 - 2026-10-17 — Claude — New **Adopt** workflow (AGENT-PROMPT workflow 2) for existing agents: inventory, merge map, ask about every file that can't be placed, merge block by block (never overwrite), no folders outside the skeleton, originals copied to `_archive/YYYY-MM-DD-pre-standard/` and removed only after approval. Skeleton gained `_archive/README.md` (merge log; disregarded by the agent). AUDIT, CREATE, START-HERE, SKILL, AGENTS, README, STANDARD updated; audit-agent.ps1 lists top-level entries not in the skeleton (info only) and its exit-2 message points to Adopt.
 
+- 2026-10-17 — Claude — Databricks Genie Code support for the one-line audit: `deploy/audit_agent.py` (stdlib Python port of audit-agent.ps1, CLI + `run_audit()` for notebooks, same read-only guard). Verified identical reports and exit codes against the PowerShell script on 5 cases (plain skeleton, filled sample with extras and `_archive/`, Red-zone Standard/MVP, non-skeleton folder, write refusal). AUDIT.md gained a "no shell, only Python" route (Git folder → Python download to a temp folder → GitHub connector); CREATE, DEPLOY, AGENT-PROMPT, README and AGENTS updated. The real Genie Code run (egress, approvals) is still untested.
+
 ## Decisions
 
 <!-- Append-only. Format: - YYYY-MM-DD — decision — why -->

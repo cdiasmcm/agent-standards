@@ -6,3 +6,4 @@ reference/*.epub
 desktop.ini
 .DS_Store
 Thumbs.db
+__pycache__/

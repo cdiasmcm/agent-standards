@@ -7,7 +7,7 @@ This repository uses two licenses:
 | What | License |
 |------|---------|
 | Documents: all Markdown files (`*.md`), the `skeleton/` templates and `dist/` | [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/) |
-| Code: everything in `deploy/` (`*.ps1`) | MIT License (below) |
+| Code: everything in `deploy/` (`*.ps1`, `*.py`) | MIT License (below) |
 
 **CC BY 4.0 in short:** you may share and adapt the documents for any purpose, including commercially,
 as long as you give appropriate credit ("agent-standards by cdiasmcm"), link to the license, and say

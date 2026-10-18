@@ -20,18 +20,41 @@ Prompt that brought you here:
   there and use it.
 - Otherwise clone it: `git clone https://github.com/cdiasmcm/agent-standards ~/.agent-standards`.
 - If you can't run git, read the files from `https://raw.githubusercontent.com/cdiasmcm/agent-standards/main/<file>`.
+- **No shell, only Python (e.g. Databricks Genie Code):**
+  1. If the workspace has a Git folder of agent-standards (often `/Users/<you>/.assistant/skills/agent-standards`), use it.
+  2. Otherwise run a Python cell that downloads the files you need into a **temporary folder** (never
+     into the agent's folder), at least `STANDARD.md`, `AGENT-PROMPT.md` and `deploy/audit_agent.py`:
+     ```python
+     import os, tempfile, urllib.request
+     base = "https://raw.githubusercontent.com/cdiasmcm/agent-standards/main/"
+     std = os.path.join(tempfile.gettempdir(), "agent-standards")
+     for f in ["STANDARD.md", "AGENT-PROMPT.md", "deploy/audit_agent.py"]:
+         os.makedirs(os.path.dirname(os.path.join(std, f)), exist_ok=True)
+         urllib.request.urlretrieve(base + f, os.path.join(std, f))
+     ```
+  3. If outbound HTTP is blocked, use the GitHub connector if it's enabled, or ask the user to create
+     the Git folder (`DEPLOY.md`).
 - Read `STANDARD.md` (the 8 blocks), then the **Audit** workflow in `AGENT-PROMPT.md`.
 
 ## Step 2. Identify the agent
-The agent folder is the current working directory, unless the user named another one. If the folder
+The agent folder is the current working directory, unless the user named another one. In a notebook
+tool (e.g. Genie Code), it's the folder of the open notebook or file; if that's unclear, ask for the
+workspace path (e.g. `/Workspace/Users/<you>/my-agent`). If the folder
 holds several agents, list them and ask which one to audit (or audit each).
 
 ## Step 3. Completeness check
 - **Skeleton layout** (the folder has `AGENT.md`): run
   `powershell -ExecutionPolicy Bypass -File ~/.agent-standards/deploy/audit-agent.ps1 -Path <agent folder> -Save`
   (on macOS/Linux: `pwsh -File ...`). It prints a block table and saves the report in `<agent>/reviews/`.
-  If PowerShell isn't available, apply the same checks by reading the files: for each block, are the
-  fields required by the agent's tier filled (no `TODO`)?
+  **No PowerShell** (e.g. Databricks): run the Python version, which gives the same result:
+  `python deploy/audit_agent.py <agent folder> --save`, or in a notebook cell:
+  ```python
+  import sys; sys.path.insert(0, "<standards root>/deploy")
+  from audit_agent import run_audit
+  print(run_audit("<agent folder>", save=True))
+  ```
+  Only if neither can run, apply the same checks by reading the files: for each block, are the fields
+  required by the agent's tier filled (no `TODO`)?
 - **Any other layout** (no `AGENT.md`; the script exits with code 2): map the folder's existing files
   onto the 8 blocks (Purpose, Steps, Input, Output, Tools & Access, Controls, Evals & DQ, Operations).
   Note which file gives the evidence for each block, and list files you couldn't map to any block.

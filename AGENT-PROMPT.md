@@ -24,6 +24,7 @@ Operations) and **3 golden rules** (simplest first · prompts steer, code enforc
 | `skeleton/` | The template every agent starts from: `AGENT.md`, `PROMPT.md`, `io/INPUT.md`, `knowledge/`, `io/OUTPUT.md`, `evals/EVAL-PLAN.md`, `evals/GOLDEN-SET.md`, `CHANGELOG.md`, `DECISIONS.md`, `STATE.md`, `reviews/`, `_archive/` (originals after Adopt; disregarded by the agent) |
 | `AGENT-IO.md` | Standard input and output envelope (blocks 3–4) |
 | `deploy/audit-agent.ps1` | Completeness check per block (run it, or replicate its checks by reading the files) |
+| `deploy/audit_agent.py` | The same check in Python (same results), for tools without PowerShell such as Databricks Genie Code |
 | `deploy/export-agent.ps1` | At the MVP gate: Markdown tables → JSON Schema + JSONL |
 | `FRAMEWORK.md` | How-to for blocks 1–2 (D0 task selection → D7 build order) |
 | `EVALS.md` | How-to for block 7 (E1–E7) |
@@ -92,7 +93,8 @@ to **merge** what the agent already knows into the skeleton, never to overwrite 
 7. Run the audit (step 3 below) and save the report in `<agent folder>/reviews/`.
 
 ### 3. Audit: an existing agent
-1. Run `deploy/audit-agent.ps1 -Path <agent folder>`, or apply the same checks by reading the files.
+1. Run `deploy/audit-agent.ps1 -Path <agent folder>` (no PowerShell: `deploy/audit_agent.py`), or
+   apply the same checks by reading the files.
    That gives completeness per block.
 2. Then do the **judgment review** per block. Is it really a Green Light task? Is each split into several
    agents backed by evidence? Are the success criteria testable yes/no statements? Is every "must never"
