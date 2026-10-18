@@ -42,7 +42,7 @@ Write one sentence: *"<Who> gets <what result> so that <business value>."*
 Name the **north-star metric** (pattern 11) and the current baseline: how it's done today, how long it
 takes, what it costs, how often it's wrong. For automations, "hours actually reclaimed per week vs.
 estimate" is a good default.
-**Pick the risk tier.** The tier sets how much of the standard applies, so small automations aren't
+**Set the risk tier** from the risk facts in `AGENT.md` §1 (the AI does this; the rule is in `STANDARD.md`). The tier sets how much of the standard applies, so small automations aren't
 buried in process:
 
 | Tier | When | What's required |
@@ -52,7 +52,7 @@ buried in process:
 | **Critical** | Money, health, legal, personal data, irreversible or external actions | Standard + Safe Writes (O8) and HITL on every write, cross-family judge/auditor (O9) before MVP, red-team set in E2, Critical sign-off at every gate |
 
 When in doubt, pick the higher tier.
-**Exit:** one outcome sentence, one north star, one baseline, one tier.
+**Exit:** one outcome sentence (the Role in `PROMPT.md`), one north star and one baseline (`evals/EVAL-PLAN.md`), one tier.
 
 ## D2. Process map
 Map the end-to-end process as it runs today (or should run): **trigger → steps → final output.**

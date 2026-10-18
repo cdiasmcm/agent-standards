@@ -65,7 +65,7 @@ full reasoning and examples, read the sources (see `reference/README.md`).
 | 8 | Compress Context [ch. 8; WB §4] | Summarize history on long tasks | Compression trigger + a list of what must never be summarized away |
 | 9 | Feed Errors Into Context [ch. 9] | Give the agent its errors so it can self-correct | Errors returned to the model; retry cap; recurring errors promoted to the prompt |
 | 10 | List Failure Modes [ch. 10; WB §11.5] | Know *why* the agent fails, not just that it fails | 3–7 named failure modes; diagnose prompt / model / tool / data first |
-| 11 | List Critical Business Metrics [ch. 11] | Tie quality to business outcomes | One north star + baseline + target (block 1) |
+| 11 | List Critical Business Metrics [ch. 11] | Tie quality to business outcomes | One north star + baseline + target (block 7, `evals/EVAL-PLAN.md`) |
 | 12 | Cross-Reference Failure Modes & Metrics [ch. 12] | Fix the failures that move the north star most | Failure mode × north star view drives the backlog (Scale) |
 | 13 | Iterate Against Your Evals [ch. 13; WB §11.4] | Benchmark every change | Pinned baseline in CI; model choice is an eval decision |
 | 14 | Create an Eval Test Suite [ch. 14; WB §11.1–11.3] | Expected behaviors as a test suite with graders | Golden set of real cases, criteria not exact wording, capability + safety families |

@@ -154,16 +154,16 @@ foreach ($b in $blocks) {
         $issues = $headerIssues + $issues
     }
     if ($b.N -eq 5) {
-        # Skills: every own skill listed in the section 5 skills table has skills/<name>/SKILL.md, and
-        # every folder in skills/ has a SKILL.md whose name matches the folder.
+        # Skills: every own skill in the section 5 tools & skills table (Type = skill, Own...) has
+        # skills/<name>/SKILL.md, and every folder in skills/ has a SKILL.md whose name matches the folder.
         $inSkills = $false
         foreach ($l in $lines) {
-            if ($l -match '^\|\s*Skill \(') { $inSkills = $true; continue }
+            if ($l -match '^\|\s*Name \(') { $inSkills = $true; continue }
             if ($inSkills -and $l -notmatch '^\|') { $inSkills = $false }
             if (-not $inSkills) { continue }
             $cells = $l.Trim().Trim('|').Split('|') | ForEach-Object { $_.Trim().Trim('`') }
             if ($cells[0] -match '^(-+|TODO|N/A.*)?$') { continue }
-            if ($cells.Count -gt 1 -and $cells[1] -match '^own') {
+            if ($cells.Count -gt 2 -and $cells[1] -match '^skill' -and $cells[2] -match '^own') {
                 if (-not (Test-Path -LiteralPath (Join-Path (Join-Path (Join-Path $Path 'skills') $cells[0]) 'SKILL.md'))) {
                     $issues += "skills/$($cells[0])/SKILL.md not found (listed as an own skill in AGENT.md section 5)"
                 }

@@ -22,7 +22,7 @@ skills/
 - **No secrets, credentials or personal data** in a skill.
 
 ## Rules
-- Every skill, own or third-party, is listed in the skills table in `AGENT.md` §5, with what it can
+- Every skill, own or third-party, is listed in the tools & skills table in `AGENT.md` §5 (Type `skill`), with what it can
   reach and whether it needs approval.
 - Only the agent's **own** skills live here. Third-party skills are installed from their source at a
   pinned version and listed in §5, not copied into this folder.

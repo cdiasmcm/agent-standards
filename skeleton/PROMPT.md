@@ -7,11 +7,13 @@ file.
 
 **Prompt version:** 0.1.0
 
-- [L] **Role** (one sentence, same job as `AGENT.md` §1): TODO
+- [L] **Role: the agent's job** (one sentence, no "and"; the only place the job is written): TODO (<verb> <object> for <whom>, so that <outcome>)
 - [L] **Context it receives** each run: facts, knowledge and prior state as defined in `io/INPUT.md`, reference files from `knowledge/` (keep as is)
 - [L] **Output format:** the result fields in `io/OUTPUT.md` (keep as is)
-- [S] **Must-never rules, repeated as guidance** (each one is enforced in code per `AGENT.md` §6): TODO
-- [S] **When unsure:** what to do instead of guessing (ask, flag, escalate): TODO
+- [L] **When unsure or stuck:** say so and escalate instead of guessing, within the limits in `AGENT.md` §2 (keep as is)
+- [L] **Handing work to a human:** how a draft or preview is presented for the checkpoints in `AGENT.md` §6: TODO
+- [S] **Must-never rules as instructions** (the same list as `AGENT.md` §6, where each one is enforced in code): TODO
+- [if: user-facing] **AI disclosure wording** shown to users: TODO
 
 ## System prompt
 Write the full instructions in the block below. The audit flags it while it still says TODO.

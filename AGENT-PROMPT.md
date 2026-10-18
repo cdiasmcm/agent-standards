@@ -48,7 +48,7 @@ output goes into the **agent's own folder**:
 | Skeleton copy and filled blocks | `<agent folder>/` |
 | Audit report | `<agent folder>/reviews/standards-audit-YYYY-MM-DD.md` |
 | Feedback on the standard (Improve) | `<agent folder>/reviews/standards-feedback-YYYY-MM-DD.md` |
-| Registry entry | `<agent folder>/AGENT.md` §8. A portfolio registry, if any, lives outside the framework (`REGISTRY-TEMPLATE.md` gives its format) |
+| Registry entry | Built from the agent's `AGENT.md` header and §8 and the Role in `PROMPT.md`. A portfolio registry, if any, lives outside the framework (`REGISTRY-TEMPLATE.md` gives its format) |
 | Gate record, versions | `<agent folder>/CHANGELOG.md` |
 | Run log | `<agent folder>/STATE.md` |
 | Design decisions | `<agent folder>/DECISIONS.md` |
@@ -59,20 +59,22 @@ Ask which one the user wants if it isn't clear. Default for "create / build a ne
 if the folder already holds the agent's files, it's **Adopt**.
 
 ### 1. Create: a new agent
-1. Ask for the **tier** (Lite / Standard / Critical; when in doubt, go higher) and where the solution's
-   folder is.
+1. Ask where the solution's folder is and who the business and tech owners are.
 2. Copy `skeleton/` to `<solution folder>/<agent-name>/`, including its dot-files (`.gitignore`, which keeps
    per-request data in `runs/` out of commits). If you can't write files, output each file as
    a Markdown block with its path.
-3. Fill the blocks **in order, one at a time**, asking only the questions that block's fields need for the
-   tier (fields tagged above the tier are marked `N/A (tier)`):
-   **1 Purpose** (start with task selection, FRAMEWORK D0: if the zone isn't Green, stop and say so) →
-   **2 Steps** (one agent first; challenge every "agent" step) → **3 Input** → **4 Output** →
-   **5 Tools & Access** → **6 Controls** → **7 Evals & DQ** (a first golden-set row from the dry-run plan)
-   → **8 Operations**.
-   Wait for the user at the end of each block. Don't jump ahead to architecture.
-4. Fill the registry entry in `AGENT.md` §8, write the first `CHANGELOG.md` entry and a `STATE.md`
-   "Resume here", all in the agent's folder.
+3. **Ask the user only for what nobody else knows** (the fields marked _(you)_):
+   - **1 Purpose:** the problem and who benefits, whether people want it automated, blockers, and the
+     risk facts. Run task selection (FRAMEWORK D0): if the zone isn't Green, stop and say so. **Set the
+     tier yourself** from the risk facts (rule in `AGENT.md` §1) and tell the user which tier and why.
+     Write the job sentence as the Role in `PROMPT.md`, and the north star in `evals/EVAL-PLAN.md`.
+   - **6 Controls:** who reviews which action and how long they can wait; confirm the must-never list you propose.
+4. **Draft everything else yourself** and show it block by block for the user to adjust: **2 Steps**
+   (one agent first; challenge every "agent" step), **3 Input**, **4 Output**, **5 Tools & Access**,
+   **7 Evals & DQ** (a first golden-set row from the dry-run plan), **8 Operations** (sensible defaults),
+   and the rest of `PROMPT.md`. Fields above the tier are marked `N/A (tier)`. Record the model choice
+   and any split into several agents in `DECISIONS.md`. Write the first `CHANGELOG.md` entry and a
+   `STATE.md` "Resume here", all in the agent's folder.
 5. Run the audit (report saved to `<agent folder>/reviews/`) and show the gap report. Anything left
    becomes the next actions.
 
@@ -102,6 +104,9 @@ to **merge** what the agent already knows into the skeleton, never to overwrite 
 2. Then do the **judgment review** per block. Is it really a Green Light task? Is each split into several
    agents backed by evidence? Are the success criteria testable yes/no statements? Is every "must never"
    enforced in code? Is the trifecta broken in code? Do the DQ checks cover what can go wrong with this data?
+   Are the tools distinct (no overlapping names, descriptions or parameters)? Walk the OWASP Top 10 for
+   Agentic Applications (goal hijack, tool misuse, privilege abuse, supply chain, code execution, memory
+   poisoning, inter-agent comms, cascading failures, human-trust exploitation, rogue agent) and note gaps.
 3. Write the report to `<agent folder>/reviews/standards-audit-YYYY-MM-DD.md`: status per block,
    blocking gaps, and the next three actions. **Never mark a block complete without evidence** from the agent's own files.
 4. For an agent built before this standard: map what exists onto the 8 blocks first, then list the gaps.

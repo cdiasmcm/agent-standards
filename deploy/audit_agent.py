@@ -98,11 +98,11 @@ def _measure(lines, tier):
 
 
 def _skill_issues(path, lines):
-    # Every own skill listed in the section 5 skills table has skills/<name>/SKILL.md, and every folder
-    # in skills/ has a SKILL.md whose name matches the folder.
+    # Every own skill in the section 5 tools & skills table (Type = skill, Own...) has
+    # skills/<name>/SKILL.md, and every folder in skills/ has a SKILL.md whose name matches the folder.
     issues, in_skills = [], False
     for l in lines:
-        if _has(r'^\|\s*Skill \(', l):
+        if _has(r'^\|\s*Name \(', l):
             in_skills = True
             continue
         if in_skills and not l.startswith('|'):
@@ -112,7 +112,7 @@ def _skill_issues(path, lines):
         cells = [c.strip().strip('`') for c in l.strip().strip('|').split('|')]
         if re.match(r'^(-+|TODO|N/A.*)?$', cells[0], re.IGNORECASE):
             continue
-        if len(cells) > 1 and _has(r'^own', cells[1]):
+        if len(cells) > 2 and _has(r'^skill', cells[1]) and _has(r'^own', cells[2]):
             if not os.path.isfile(os.path.join(path, 'skills', cells[0], 'SKILL.md')):
                 issues.append('skills/%s/SKILL.md not found (listed as an own skill in AGENT.md section 5)' % cells[0])
     skills_dir = os.path.join(path, 'skills')

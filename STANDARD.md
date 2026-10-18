@@ -22,17 +22,20 @@ PATTERNS, PRINCIPLES). This page is the version you explain to someone.
 ## The 8 blocks
 | # | Block | Every agent has… | Where in the skeleton | How-to |
 |---|-------|------------------|-----------------------|--------|
-| 1 | **Purpose** | The right task (Green Light), a one-sentence job, a north-star metric and baseline, a risk tier, owners, and an AI-disclosure / data-protection check | `AGENT.md` §1 | FRAMEWORK D0–D1 · patterns O7, 11 |
+| 1 | **Purpose** | The right task (Green Light), owners, the risk facts that set its tier, and a compliance check (AI disclosure, data protection). Its one-sentence job is the Role in `PROMPT.md`; its north star is in `evals/EVAL-PLAN.md` | `AGENT.md` §1 | FRAMEWORK D0–D1 · patterns O7, 11 |
 | 2 | **Steps** | A process map with each step tagged code / LLM / workflow / agent / human, a stop condition with caps, an escalation rule, one agent unless a split is proven, and its instructions to the model (role, system prompt, examples) | `AGENT.md` §2 + `PROMPT.md` | FRAMEWORK D2–D5 · patterns 1–2, O1, O2, O11, O13 |
 | 3 | **Input** | The standard input envelope, its own payload fields, and **input data-quality checks** (complete, valid, fresh, no duplicates, trusted vs untrusted), and its reference files (naming conventions, code lists, mappings) as versioned CSV/Markdown | `io/INPUT.md` + `knowledge/` | AGENT-IO · patterns 7–8, 18, O12 |
 | 4 | **Output** | The standard output envelope, its own result fields, and **output data-quality checks** (schema-valid, required fields, grounded/cited) | `io/OUTPUT.md` | AGENT-IO · patterns O3 (L1), O8 |
 | 5 | **Tools & Access** | Distinct, namespaced tools with read/write rights; its own identity with short-lived credentials; safe writes; the trifecta broken in code; vetted third-party tools; every skill listed (own skills as `skills/<name>/SKILL.md`) | `AGENT.md` §5 + `skills/` | patterns 3, 18–20, O8 · PLATFORM §4b |
-| 6 | **Controls** | A human-control level (H1–H5) per action, "must never" rules enforced in code, an autonomy plan, guardrails, and a kill switch | `AGENT.md` §6 | patterns 4, 21, O5, O10 · OWASP Agentic |
+| 6 | **Controls** | One table of the actions that need a human (reviewer, max wait), "must never" rules enforced in code, the current autonomy level, guardrails, and a kill switch | `AGENT.md` §6 | patterns 4, 21, O5, O10 · OWASP Agentic |
 | 7 | **Evals & DQ** | Testable success criteria (5 layers), a golden set of real cases, graders, a baseline, stage thresholds, and data-quality metrics tracked over time | `evals/` | EVALS E1–E7 · patterns 10–17, O3, O4, O9 |
-| 8 | **Operations** | Model and enforced budget, redacted logs, version history, rollout and rollback, a human-decision log, handoff files, a registry entry, and per-request data kept out of git (production → trace store; local runs → git-ignored `runs/`) | `AGENT.md` §8 + `CHANGELOG.md`, `DECISIONS.md`, `STATE.md`, `reviews/` | PLATFORM · patterns O6 · P24 |
+| 8 | **Operations** | Model and enforced budget, redacted logs, version history, rollout and rollback, where traces, decisions and logs are stored (and for how long), handoff files, and per-request data kept out of git (production → trace store; local runs → git-ignored `runs/`) | `AGENT.md` §8 + `CHANGELOG.md`, `DECISIONS.md`, `STATE.md`, `reviews/` | PLATFORM · patterns O6 · P24 |
 
 ## How much applies: the risk tier
-Every field in the skeleton is tagged **[L]**, **[S]** or **[C]**:
+Every field in the skeleton is tagged **[L]**, **[S]** or **[C]**. Nobody picks the tier by hand: the AI
+sets it from the risk facts in `AGENT.md` §1 (any of personal data, irreversible or external actions,
+money/health/legal → Critical; otherwise, if it changes anything or people rely on it → Standard;
+otherwise Lite).
 - **Lite [L]**: internal, low risk, read-only, no personal data, reversible. Fill the [L] fields only.
 - **Standard [S]**: the default for anything people rely on. Fill [L] + [S].
 - **Critical [C]**: money, health, legal, personal data, irreversible or external actions. Fill everything.

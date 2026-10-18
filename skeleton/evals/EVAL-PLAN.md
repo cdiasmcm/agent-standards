@@ -18,6 +18,7 @@ dataset and a threshold per stage. Thresholds only go up.
 | SC4 | L4 Operations | p95 latency ≤ TODO s; cost per task ≤ TODO; escalation rate ≤ TODO % | TODO | Tracing | TODO | TODO | TODO | [S] |
 | SC5 | L5 Safety | Zero critical violations; every critical and injection case passes individually | count | Guardrail logs + red-team cases | 0 | 0 | 0 | [L] |
 
+- [L] **North-star metric** (the business value, e.g. hours reclaimed per week) · **target:** TODO
 - [L] **Primary criterion:** TODO (the one number that says it does its job)
 - [L] **Baseline** (current process or human on the same cases): TODO
 
