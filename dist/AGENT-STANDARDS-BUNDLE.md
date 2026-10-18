@@ -21,6 +21,7 @@
 - FILE: skeleton/CHANGELOG.md
 - FILE: skeleton/DECISIONS.md
 - FILE: skeleton/STATE.md
+- FILE: skeleton/_archive/README.md
 - FILE: FRAMEWORK.md
 - FILE: EVALS.md
 - FILE: PLATFORM.md
@@ -42,10 +43,14 @@ create a new agent, or audit an existing one, against our standard: **8 blocks e
    - If you only have one file: use `dist/AGENT-STANDARDS-BUNDLE.md`, which contains everything. If you
      have neither, ask the user to attach the bundle. Don't work from memory.
 2. **Pick the workflow** from the request: **Create** (default for "create / build a new agent"),
-   **Audit** ("check / review my agent"), **Gate** ("ready for pilot?"), or **Improve**.
+   **Adopt** ("bring my existing agent onto the standard"), **Audit** ("check / review my agent"),
+   **Gate** ("ready for pilot?"), or **Improve**.
 3. **For Create:** ask for the risk tier, copy `skeleton/` into the solution's folder, then fill the 8
    blocks **in order, one at a time**, starting with block 1 Purpose: is this the right task to
    automate? Wait for the user at the end of each block.
+   **For Adopt** (the folder already has files): inventory them, propose a merge map, ask about every
+   file you can't place, merge block by block, and move originals to `_archive/` only after the user
+   approves. Never create folders that aren't in `skeleton/` (AGENT-PROMPT, workflow 2).
 4. **For Audit:** run `deploy/audit-agent.ps1 -Path <agent folder>` (or apply its checks by reading the
    files), then review each block's quality and list what's missing.
 5. **This framework is read-only.** Write every output (skeleton copy, audit report, registry entry,
@@ -77,6 +82,8 @@ Prompt that brought you here:
 - Write outputs **only** in the agent's folder (`<agent>/reviews/`). Don't change any of the agent's
   other files without asking the user first.
 - Never mark a block complete without evidence from the agent's own files.
+- An audit never moves, renames, merges or creates files or folders (except the report). Bringing the
+  agent onto the skeleton is the **Adopt** workflow in `AGENT-PROMPT.md`, run only if the user asks.
 
 ## Step 1. Get the framework (read-only)
 - If a local clone already exists (the user tells you, or `~/.agent-standards` exists), run `git pull`
@@ -97,7 +104,7 @@ holds several agents, list them and ask which one to audit (or audit each).
   fields required by the agent's tier filled (no `TODO`)?
 - **Any other layout** (no `AGENT.md`; the script exits with code 2): map the folder's existing files
   onto the 8 blocks (Purpose, Steps, Input, Output, Tools & Access, Controls, Evals & DQ, Operations).
-  Note which file gives the evidence for each block.
+  Note which file gives the evidence for each block, and list files you couldn't map to any block.
 
 ## Step 4. Judgment review
 For each block, check quality, not only presence (AGENT-PROMPT, Audit step 2). Is it a Green Light
@@ -114,7 +121,9 @@ data? Propose the risk tier if none is stated.
    - (optional) feedback on the standard itself, written to `<agent folder>/reviews/standards-feedback-YYYY-MM-DD.md`
 2. **Show the user** the block table, the blocking gaps and the next three actions in your reply, plus
    the path of the saved report.
-3. Ask whether they want help fixing the gaps. Don't start changing their files on your own.
+3. Ask whether they want help fixing the gaps. Don't start changing their files on your own. If the
+   agent isn't on the skeleton yet, offer **Adopt** (`AGENT-PROMPT.md` workflow 2): merge map first,
+   questions about any file you can't place, no folders outside `skeleton/`, originals to `_archive/`.
 
 ---
 
@@ -143,7 +152,9 @@ Read `STANDARD.md`, then the **Create** workflow in `AGENT-PROMPT.md`.
 1. Restate the problem in one sentence and ask for: the agent's name, where its folder should go
    (default: a new folder in the current directory), and the **risk tier** (Lite / Standard / Critical).
    When in doubt, choose the higher tier.
-2. Copy the framework's `skeleton/` folder to `<agent folder>/`. If you can't write files, output each
+2. If `<agent folder>` already has files, **stop**: this is an existing agent. Switch to the **Adopt**
+   workflow in `AGENT-PROMPT.md` (merge, never overwrite) and tell the user.
+   Otherwise copy the framework's `skeleton/` folder to `<agent folder>/`. If you can't write files, output each
    skeleton file as a Markdown block with its path.
 3. Set `Tier`, `Stage: Design` and the owners in `AGENT.md`.
 
@@ -220,7 +231,10 @@ at MVP, 100 at Pilot, 300 at Scale) and is passed through a gate recorded in `CH
 - **New agent:** "Read START-HERE.md and create a new agent for <problem>". The advisor copies the
   skeleton and fills blocks 1 → 8 with you, one at a time.
 - **Existing agent:** run `deploy/audit-agent.ps1 <agent folder>` for a block-by-block gap report,
-  then ask the advisor for the judgment review.
+  then ask the advisor for the judgment review. To bring it onto the skeleton, the advisor runs
+  **Adopt**: it merges the agent's existing files into the skeleton (asking about any file it can't
+  place), creates no folders outside the skeleton, and keeps originals in `_archive/`, which the agent
+  ignores.
 
 ---
 
@@ -277,7 +291,7 @@ Operations) and **3 golden rules** (simplest first · prompts steer, code enforc
 |------|------------|
 | `STANDARD.md` | The 8 blocks, tiers, stages, sources. Explain the standard from this page |
 | `AUDIT.md`, `CREATE.md` | Step-by-step runbooks when launched by URL ("Read <URL> and audit / create …") |
-| `skeleton/` | The template every agent starts from: `AGENT.md`, `PROMPT.md`, `io/INPUT.md`, `knowledge/`, `io/OUTPUT.md`, `evals/EVAL-PLAN.md`, `evals/GOLDEN-SET.md`, `CHANGELOG.md`, `DECISIONS.md`, `STATE.md`, `reviews/` |
+| `skeleton/` | The template every agent starts from: `AGENT.md`, `PROMPT.md`, `io/INPUT.md`, `knowledge/`, `io/OUTPUT.md`, `evals/EVAL-PLAN.md`, `evals/GOLDEN-SET.md`, `CHANGELOG.md`, `DECISIONS.md`, `STATE.md`, `reviews/`, `_archive/` (originals after Adopt; disregarded by the agent) |
 | `AGENT-IO.md` | Standard input and output envelope (blocks 3–4) |
 | `deploy/audit-agent.ps1` | Completeness check per block (run it, or replicate its checks by reading the files) |
 | `deploy/export-agent.ps1` | At the MVP gate: Markdown tables → JSON Schema + JSONL |
@@ -307,9 +321,11 @@ output goes into the **agent's own folder**:
 | Gate record, versions | `<agent folder>/CHANGELOG.md` |
 | Run log | `<agent folder>/STATE.md` |
 | Design decisions | `<agent folder>/DECISIONS.md` |
+| Originals merged during Adopt + merge log | `<agent folder>/_archive/` |
 
 ## Workflows
-Ask which one the user wants if it isn't clear. Default for "create / build a new agent" is **Create**.
+Ask which one the user wants if it isn't clear. Default for "create / build a new agent" is **Create**;
+if the folder already holds the agent's files, it's **Adopt**.
 
 ### 1. Create: a new agent
 1. Ask for the **tier** (Lite / Standard / Critical; when in doubt, go higher) and where the solution's
@@ -328,7 +344,24 @@ Ask which one the user wants if it isn't clear. Default for "create / build a ne
 5. Run the audit (report saved to `<agent folder>/reviews/`) and show the gap report. Anything left
    becomes the next actions.
 
-### 2. Audit: an existing agent
+### 2. Adopt: bring an existing agent onto the skeleton
+Use this when the agent's folder already has files (its own PRD, prompts, notes, scripts…). The goal is
+to **merge** what the agent already knows into the skeleton, never to overwrite it or invent structure.
+1. **Inventory** every file and folder in the agent's folder (read-only). Nothing changes yet.
+2. **Propose a merge map** and show it: `existing file → skeleton target (file + section) → action`
+   (merge content / move to `knowledge/` / unknown). Wait for the user.
+3. **Ask** about every row marked unknown or ambiguous, and about every conflict. An existing file with a
+   skeleton name (e.g. its own `AGENT.md` or `CHANGELOG.md`) is merged section by section, never
+   overwritten. **If you don't know what to do with a file, ask. Don't guess.**
+4. Copy in the skeleton files that don't exist yet, then merge content into them **block by block**,
+   confirming each block as in Create. Mark merged fields with `(from <original path>)`.
+5. Copy each merged original into `_archive/YYYY-MM-DD-pre-standard/` (same relative path) and log it in
+   `_archive/README.md`. Remove originals from their old place **only after the user approves the list**.
+6. **Never create folders that aren't part of the skeleton.** A file the user wants to keep active gets a
+   skeleton place (usually `knowledge/`), or stays where it is if the user decides so.
+7. Run the audit (step 3 below) and save the report in `<agent folder>/reviews/`.
+
+### 3. Audit: an existing agent
 1. Run `deploy/audit-agent.ps1 -Path <agent folder>`, or apply the same checks by reading the files.
    That gives completeness per block.
 2. Then do the **judgment review** per block. Is it really a Green Light task? Is each split into several
@@ -337,14 +370,16 @@ Ask which one the user wants if it isn't clear. Default for "create / build a ne
 3. Write the report to `<agent folder>/reviews/standards-audit-YYYY-MM-DD.md`: status per block,
    blocking gaps, and the next three actions. **Never mark a block complete without evidence** from the agent's own files.
 4. For an agent built before this standard: map what exists onto the 8 blocks first, then list the gaps.
+   An audit never moves, renames or merges files. If the user wants the agent brought onto the
+   skeleton, run **Adopt**.
 
-### 3. Gate: release an agent to the next stage
+### 4. Gate: release an agent to the next stage
 Check block 7 against the stage thresholds (golden set 20 / 100 / 300 real cases, criteria met at pass^k,
 **every critical case passing individually**) and blocks 5–6 (safety, kill switch, security scan).
 Run `deploy/export-agent.ps1` at the MVP gate. Record the decision as a new `CHANGELOG.md` row
 (version, eval before → after, gate, approver, status `good` or `draft`).
 
-### 4. Improve: feedback on the standard
+### 5. Improve: feedback on the standard
 When a session exposes a gap or a rule that doesn't work, write a proposal (file, old → new, why) to
 `<agent folder>/reviews/standards-feedback-YYYY-MM-DD.md`. **Never edit the framework yourself.** Its
 maintainer reviews proposals and decides whether to change the standard.
@@ -358,6 +393,8 @@ maintainer reviews proposals and decides whether to change the standard.
 - Security fields (trifecta, guardrails, kill switch) are never N/A for a user-facing agent with data access.
 - Paraphrase the sources; quote at most a short phrase.
 - **The framework is read-only.** Nothing about any agent is ever written to the standards root.
+- **In an agent's folder, only skeleton folders.** Never create a folder that isn't in `skeleton/`.
+  Merge, never overwrite. A file you can't place: ask the user.
 - After each completed workflow, append one dated line to the **agent's** `STATE.md` (Log).
 
 ---
@@ -767,6 +804,25 @@ Resume here → TODO (one concrete next action)
 
 ## Log
 <!-- Append-only. Newest at the bottom. Format: - YYYY-MM-DD — who — what was done / what is pending -->
+
+---
+
+# FILE: skeleton/_archive/README.md
+
+# _archive — originals kept for history (disregarded by the agent)
+
+When an existing agent is brought onto the skeleton (the **Adopt** workflow), its original files are
+merged into the skeleton files and then copied here, one dated subfolder per merge
+(`_archive/YYYY-MM-DD-pre-standard/`, same relative paths as before). They are removed from their old
+place only after the owner approves the list.
+
+**This folder is disregarded by the agent.** Nothing in it is ever loaded as prompt, context, knowledge
+or eval data, and the audit skips it. It's read only by people who want the history. If something here
+is still needed, merge it into the right skeleton file instead of pointing the agent at it.
+
+## Merge log
+| Date | Original path | Content merged into (file, section) | Archived as | Approved by |
+|------|---------------|--------------------------------------|-------------|-------------|
 
 ---
 

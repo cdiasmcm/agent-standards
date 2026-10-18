@@ -24,6 +24,7 @@ $files = @(
     'skeleton/CHANGELOG.md',
     'skeleton/DECISIONS.md',
     'skeleton/STATE.md',
+    'skeleton/_archive/README.md',
     'FRAMEWORK.md',
     'EVALS.md',
     'PLATFORM.md',

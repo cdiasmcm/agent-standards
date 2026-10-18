@@ -13,7 +13,9 @@ folder** (see `AGENT-PROMPT.md`, "Where outputs go").
 
 ## If you are asked to create, audit or gate an agent
 Follow **`AGENT-PROMPT.md`** (entry point: `START-HERE.md`). It holds the role, the file map and the
-four workflows: Create, Audit, Gate, Improve. Work only in the agent's folder.
+five workflows: Create, Adopt, Audit, Gate, Improve. Work only in the agent's folder, and create there
+only the folders that are in `skeleton/`. Merge existing files, never overwrite; ask about any file you
+can't place.
 
 ## Maintaining the framework (only when the task is to change the standard itself)
 This section applies only when the maintainer explicitly asks to change the framework, never during

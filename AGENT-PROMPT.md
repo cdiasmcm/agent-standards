@@ -21,7 +21,7 @@ Operations) and **3 golden rules** (simplest first · prompts steer, code enforc
 |------|------------|
 | `STANDARD.md` | The 8 blocks, tiers, stages, sources. Explain the standard from this page |
 | `AUDIT.md`, `CREATE.md` | Step-by-step runbooks when launched by URL ("Read <URL> and audit / create …") |
-| `skeleton/` | The template every agent starts from: `AGENT.md`, `PROMPT.md`, `io/INPUT.md`, `knowledge/`, `io/OUTPUT.md`, `evals/EVAL-PLAN.md`, `evals/GOLDEN-SET.md`, `CHANGELOG.md`, `DECISIONS.md`, `STATE.md`, `reviews/` |
+| `skeleton/` | The template every agent starts from: `AGENT.md`, `PROMPT.md`, `io/INPUT.md`, `knowledge/`, `io/OUTPUT.md`, `evals/EVAL-PLAN.md`, `evals/GOLDEN-SET.md`, `CHANGELOG.md`, `DECISIONS.md`, `STATE.md`, `reviews/`, `_archive/` (originals after Adopt; disregarded by the agent) |
 | `AGENT-IO.md` | Standard input and output envelope (blocks 3–4) |
 | `deploy/audit-agent.ps1` | Completeness check per block (run it, or replicate its checks by reading the files) |
 | `deploy/export-agent.ps1` | At the MVP gate: Markdown tables → JSON Schema + JSONL |
@@ -51,9 +51,11 @@ output goes into the **agent's own folder**:
 | Gate record, versions | `<agent folder>/CHANGELOG.md` |
 | Run log | `<agent folder>/STATE.md` |
 | Design decisions | `<agent folder>/DECISIONS.md` |
+| Originals merged during Adopt + merge log | `<agent folder>/_archive/` |
 
 ## Workflows
-Ask which one the user wants if it isn't clear. Default for "create / build a new agent" is **Create**.
+Ask which one the user wants if it isn't clear. Default for "create / build a new agent" is **Create**;
+if the folder already holds the agent's files, it's **Adopt**.
 
 ### 1. Create: a new agent
 1. Ask for the **tier** (Lite / Standard / Critical; when in doubt, go higher) and where the solution's
@@ -72,7 +74,24 @@ Ask which one the user wants if it isn't clear. Default for "create / build a ne
 5. Run the audit (report saved to `<agent folder>/reviews/`) and show the gap report. Anything left
    becomes the next actions.
 
-### 2. Audit: an existing agent
+### 2. Adopt: bring an existing agent onto the skeleton
+Use this when the agent's folder already has files (its own PRD, prompts, notes, scripts…). The goal is
+to **merge** what the agent already knows into the skeleton, never to overwrite it or invent structure.
+1. **Inventory** every file and folder in the agent's folder (read-only). Nothing changes yet.
+2. **Propose a merge map** and show it: `existing file → skeleton target (file + section) → action`
+   (merge content / move to `knowledge/` / unknown). Wait for the user.
+3. **Ask** about every row marked unknown or ambiguous, and about every conflict. An existing file with a
+   skeleton name (e.g. its own `AGENT.md` or `CHANGELOG.md`) is merged section by section, never
+   overwritten. **If you don't know what to do with a file, ask. Don't guess.**
+4. Copy in the skeleton files that don't exist yet, then merge content into them **block by block**,
+   confirming each block as in Create. Mark merged fields with `(from <original path>)`.
+5. Copy each merged original into `_archive/YYYY-MM-DD-pre-standard/` (same relative path) and log it in
+   `_archive/README.md`. Remove originals from their old place **only after the user approves the list**.
+6. **Never create folders that aren't part of the skeleton.** A file the user wants to keep active gets a
+   skeleton place (usually `knowledge/`), or stays where it is if the user decides so.
+7. Run the audit (step 3 below) and save the report in `<agent folder>/reviews/`.
+
+### 3. Audit: an existing agent
 1. Run `deploy/audit-agent.ps1 -Path <agent folder>`, or apply the same checks by reading the files.
    That gives completeness per block.
 2. Then do the **judgment review** per block. Is it really a Green Light task? Is each split into several
@@ -81,14 +100,16 @@ Ask which one the user wants if it isn't clear. Default for "create / build a ne
 3. Write the report to `<agent folder>/reviews/standards-audit-YYYY-MM-DD.md`: status per block,
    blocking gaps, and the next three actions. **Never mark a block complete without evidence** from the agent's own files.
 4. For an agent built before this standard: map what exists onto the 8 blocks first, then list the gaps.
+   An audit never moves, renames or merges files. If the user wants the agent brought onto the
+   skeleton, run **Adopt**.
 
-### 3. Gate: release an agent to the next stage
+### 4. Gate: release an agent to the next stage
 Check block 7 against the stage thresholds (golden set 20 / 100 / 300 real cases, criteria met at pass^k,
 **every critical case passing individually**) and blocks 5–6 (safety, kill switch, security scan).
 Run `deploy/export-agent.ps1` at the MVP gate. Record the decision as a new `CHANGELOG.md` row
 (version, eval before → after, gate, approver, status `good` or `draft`).
 
-### 4. Improve: feedback on the standard
+### 5. Improve: feedback on the standard
 When a session exposes a gap or a rule that doesn't work, write a proposal (file, old → new, why) to
 `<agent folder>/reviews/standards-feedback-YYYY-MM-DD.md`. **Never edit the framework yourself.** Its
 maintainer reviews proposals and decides whether to change the standard.
@@ -102,4 +123,6 @@ maintainer reviews proposals and decides whether to change the standard.
 - Security fields (trifecta, guardrails, kill switch) are never N/A for a user-facing agent with data access.
 - Paraphrase the sources; quote at most a short phrase.
 - **The framework is read-only.** Nothing about any agent is ever written to the standards root.
+- **In an agent's folder, only skeleton folders.** Never create a folder that isn't in `skeleton/`.
+  Merge, never overwrite. A file you can't place: ask the user.
 - After each completed workflow, append one dated line to the **agent's** `STATE.md` (Log).

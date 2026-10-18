@@ -21,6 +21,11 @@ Read https://raw.githubusercontent.com/cdiasmcm/agent-standards/main/CREATE.md a
 The AI fetches this framework read-only, does the work, saves the results in **your agent's folder**
 (`reviews/`), and shows you the block-by-block results.
 
+**Already have an agent with its own files?** After the audit, ask the AI to bring it onto the skeleton
+(the **Adopt** workflow). It shows a merge map first, asks about any file it can't place, merges your
+content block by block, creates no folders outside the skeleton, and moves originals to `_archive/`
+(ignored by the agent) only after you approve.
+
 ## What the audit gives you
 One report, saved as `reviews/standards-audit-YYYY-MM-DD.md` in your agent's folder and summarized in
 the chat. It contains:
@@ -87,7 +92,7 @@ Setup per tool (Genie Code, chat tools): [DEPLOY.md](DEPLOY.md).
 | Path | What it is |
 |------|------------|
 | `STANDARD.md` | **The standard**: 8 blocks, 3 golden rules, tiers, stages, sources |
-| `skeleton/` | Template copied for every new agent (all Markdown; one place per block), including `PROMPT.md` for the instructions to the model and `knowledge/` for reference files such as naming conventions |
+| `skeleton/` | Template copied for every new agent (all Markdown; one place per block), including `PROMPT.md` for the instructions to the model `knowledge/` for reference files such as naming conventions, and `_archive/` for originals after an Adopt (ignored by the agent) |
 | `AGENT-IO.md` | Standard input/output envelope (blocks 3–4) |
 | `deploy/audit-agent.ps1` | Block-by-block completeness audit of an agent folder |
 | `deploy/export-agent.ps1` | At build time: Markdown tables → JSON Schema + JSONL |

@@ -48,7 +48,10 @@ at MVP, 100 at Pilot, 300 at Scale) and is passed through a gate recorded in `CH
 - **New agent:** "Read START-HERE.md and create a new agent for <problem>". The advisor copies the
   skeleton and fills blocks 1 → 8 with you, one at a time.
 - **Existing agent:** run `deploy/audit-agent.ps1 <agent folder>` for a block-by-block gap report,
-  then ask the advisor for the judgment review.
+  then ask the advisor for the judgment review. To bring it onto the skeleton, the advisor runs
+  **Adopt**: it merges the agent's existing files into the skeleton (asking about any file it can't
+  place), creates no folders outside the skeleton, and keeps originals in `_archive/`, which the agent
+  ignores.
 
 ---
 

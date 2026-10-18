@@ -12,6 +12,8 @@ Prompt that brought you here:
 - Write outputs **only** in the agent's folder (`<agent>/reviews/`). Don't change any of the agent's
   other files without asking the user first.
 - Never mark a block complete without evidence from the agent's own files.
+- An audit never moves, renames, merges or creates files or folders (except the report). Bringing the
+  agent onto the skeleton is the **Adopt** workflow in `AGENT-PROMPT.md`, run only if the user asks.
 
 ## Step 1. Get the framework (read-only)
 - If a local clone already exists (the user tells you, or `~/.agent-standards` exists), run `git pull`
@@ -32,7 +34,7 @@ holds several agents, list them and ask which one to audit (or audit each).
   fields required by the agent's tier filled (no `TODO`)?
 - **Any other layout** (no `AGENT.md`; the script exits with code 2): map the folder's existing files
   onto the 8 blocks (Purpose, Steps, Input, Output, Tools & Access, Controls, Evals & DQ, Operations).
-  Note which file gives the evidence for each block.
+  Note which file gives the evidence for each block, and list files you couldn't map to any block.
 
 ## Step 4. Judgment review
 For each block, check quality, not only presence (AGENT-PROMPT, Audit step 2). Is it a Green Light
@@ -49,4 +51,6 @@ data? Propose the risk tier if none is stated.
    - (optional) feedback on the standard itself, written to `<agent folder>/reviews/standards-feedback-YYYY-MM-DD.md`
 2. **Show the user** the block table, the blocking gaps and the next three actions in your reply, plus
    the path of the saved report.
-3. Ask whether they want help fixing the gaps. Don't start changing their files on your own.
+3. Ask whether they want help fixing the gaps. Don't start changing their files on your own. If the
+   agent isn't on the skeleton yet, offer **Adopt** (`AGENT-PROMPT.md` workflow 2): merge map first,
+   questions about any file you can't place, no folders outside `skeleton/`, originals to `_archive/`.

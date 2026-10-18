@@ -30,6 +30,8 @@ Resume here → Test the one-line AUDIT prompt from a real agent folder; set up 
 
 - 2026-10-17 — Claude — Skeleton gained `PROMPT.md` (block 2: role, system prompt, examples) and `knowledge/README.md` (block 3: reference files such as naming conventions, as CSV/Markdown, with owner and refresh; must-hold rules also checked in output DQ). Release unit now includes both. audit-agent.ps1 checks both files, flags an unwritten system prompt and listed reference files that don't exist. STANDARD, CREATE, AGENT-PROMPT, README and the bundle updated.
 
+- 2026-10-17 — Claude — New **Adopt** workflow (AGENT-PROMPT workflow 2) for existing agents: inventory, merge map, ask about every file that can't be placed, merge block by block (never overwrite), no folders outside the skeleton, originals copied to `_archive/YYYY-MM-DD-pre-standard/` and removed only after approval. Skeleton gained `_archive/README.md` (merge log; disregarded by the agent). AUDIT, CREATE, START-HERE, SKILL, AGENTS, README, STANDARD updated; audit-agent.ps1 lists top-level entries not in the skeleton (info only) and its exit-2 message points to Adopt.
+
 ## Decisions
 
 <!-- Append-only. Format: - YYYY-MM-DD — decision — why -->
@@ -39,6 +41,7 @@ Resume here → Test the one-line AUDIT prompt from a real agent folder; set up 
 - 2026-10-16 — Book text is paraphrased, with our own adjustments marked "Our rule" — keeps the book's view and ours apart, and respects copyright.
 - 2026-10-16 — Context-rot threshold (~100K in the book) is treated as model-specific and measured with evals — the book is dated Oct 2025 and models have changed since.
 - 2026-10-16 — Every solution is decomposed with FRAMEWORK D1–D7 before any build; steps are tagged C/L/W/A/H and only A steps become agents — the owner wants each agent to solve one problem at a time; the simplest-level rule follows Anthropic's *Building Effective Agents* (the book's source for pattern 2).
+- 2026-10-17 — Existing agents are merged into the skeleton (Adopt), never overwritten; no folders outside the skeleton; unplaceable files are asked about; originals go to `_archive/`, which the agent disregards — the owner's rules for applying the framework to agents that already have files.
 - 2026-10-16 — Single-responsibility test S1–S7 with a ≤ 7 tools starting heuristic — makes "one problem per agent" checkable instead of a matter of taste.
 - 2026-10-16 — Every agent needs a charter with a 5-layer success contract (output, quality, business, operations, safety), written as yes/no criteria with per-stage thresholds — the owner asked for clear success criteria for each agent.
 - 2026-10-16 — Evals follow a fixed lifecycle E1–E7 with an eval plan per agent, written before the build — book Part III gives the patterns but no order; the owner wants evals as a built-in step of the process.
