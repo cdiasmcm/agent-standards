@@ -37,6 +37,7 @@
 - [L] **Caps:** max iterations TODO · timeout TODO s · max cost TODO
 - [L] **Escalate to a human after:** TODO failed attempts, or on: TODO
 - [L] **Exit reasons logged:** done / cap / timeout / budget / error / human_gate (keep as is)
+- [L] **Instructions to the model** (role, system prompt, examples) are in `PROMPT.md` (keep as is)
 - [S] **Plan-change limit** (how far it may change its own plan before a checkpoint): TODO
 - [S] **One agent or several?** TODO (one agent, or the D4 reason 1–4 plus the X5 evidence for each extra agent)
 - [if: more than one agent] **Topology:** TODO (hierarchical / pipeline / peer-to-peer + validator / swarm; A2A only across trust boundaries)
@@ -77,7 +78,7 @@
 - [L] **Budget enforced at:** TODO (gateway / provider) · per run TODO · per month TODO
 - [L] **Logging:** what is logged TODO · secrets and personal data redacted TODO · who can read logs TODO
 - [L] **Registry entry:** agent TODO · solution TODO · mission TODO · tier/stage TODO · owners TODO · model TODO · status TODO · **portfolio registry kept at:** TODO (outside agent-standards)
-- [L] **Version history** kept in `CHANGELOG.md`: release unit = prompt + model + tools + memory config + I/O contract (keep as is)
+- [L] **Version history** kept in `CHANGELOG.md`: release unit = prompt (`PROMPT.md`) + model + tools + memory config + I/O contract + reference files (`knowledge/`) (keep as is)
 - [L] **Human-decision log** (runtime approvals, rejections, edits, overrides): stored in TODO · fields: request_id, agent version, action, preview shown, decision, decided_by, time, reason, final value (keep as is) · retention TODO · access TODO
 - [S] **Edits and overrides feed evals** (`evals/GOLDEN-SET.md`): TODO (how, how often)
 - [S] **Rollout:** shadow TODO → canary TODO % → full · **rollback trigger:** TODO · **rollback method:** repoint to the last good `CHANGELOG.md` version, clear caches TODO

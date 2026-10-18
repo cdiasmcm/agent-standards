@@ -21,7 +21,7 @@ Operations) and **3 golden rules** (simplest first · prompts steer, code enforc
 |------|------------|
 | `STANDARD.md` | The 8 blocks, tiers, stages, sources. Explain the standard from this page |
 | `AUDIT.md`, `CREATE.md` | Step-by-step runbooks when launched by URL ("Read <URL> and audit / create …") |
-| `skeleton/` | The template every agent starts from: `AGENT.md`, `io/INPUT.md`, `io/OUTPUT.md`, `evals/EVAL-PLAN.md`, `evals/GOLDEN-SET.md`, `CHANGELOG.md`, `DECISIONS.md`, `STATE.md`, `reviews/` |
+| `skeleton/` | The template every agent starts from: `AGENT.md`, `PROMPT.md`, `io/INPUT.md`, `knowledge/`, `io/OUTPUT.md`, `evals/EVAL-PLAN.md`, `evals/GOLDEN-SET.md`, `CHANGELOG.md`, `DECISIONS.md`, `STATE.md`, `reviews/` |
 | `AGENT-IO.md` | Standard input and output envelope (blocks 3–4) |
 | `deploy/audit-agent.ps1` | Completeness check per block (run it, or replicate its checks by reading the files) |
 | `deploy/export-agent.ps1` | At the MVP gate: Markdown tables → JSON Schema + JSONL |

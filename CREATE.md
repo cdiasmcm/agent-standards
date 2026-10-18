@@ -30,8 +30,12 @@ For each block, ask only the questions its fields need for the tier. Fields abov
 `N/A (tier)`. Fill the files, then confirm with the user before moving on.
 1. **Purpose** (`AGENT.md` §1): start with task selection (FRAMEWORK D0). If the task isn't Green
    Light, stop and say so.
-2. **Steps** (`AGENT.md` §2): one agent first; challenge every step tagged "agent".
-3. **Input** (`io/INPUT.md`) → 4. **Output** (`io/OUTPUT.md`)
+2. **Steps** (`AGENT.md` §2): one agent first; challenge every step tagged "agent". Then write the
+   instructions to the model in `PROMPT.md` (role, system prompt, examples).
+3. **Input** (`io/INPUT.md`): ask for any reference files the agent must follow (naming conventions,
+   code lists, mappings). Save each as CSV or Markdown in `knowledge/` and list it in
+   `knowledge/README.md`. → 4. **Output** (`io/OUTPUT.md`): a rule from a reference file that must
+   always hold gets a DQ check against that file.
 5. **Tools & Access** (`AGENT.md` §5) → 6. **Controls** (`AGENT.md` §6)
 7. **Evals & DQ** (`evals/`): add a first golden-set row from the dry-run plan.
 8. **Operations** (`AGENT.md` §8), plus the first `CHANGELOG.md` entry and a `STATE.md` "Resume here".

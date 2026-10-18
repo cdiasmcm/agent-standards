@@ -28,6 +28,8 @@ Resume here → Test the one-line AUDIT prompt from a real agent folder; set up 
 
 - 2026-10-16 — Claude — Published publicly at https://github.com/cdiasmcm/agent-standards (clean single-commit history); raw AUDIT.md / CREATE.md URLs verified.
 
+- 2026-10-17 — Claude — Skeleton gained `PROMPT.md` (block 2: role, system prompt, examples) and `knowledge/README.md` (block 3: reference files such as naming conventions, as CSV/Markdown, with owner and refresh; must-hold rules also checked in output DQ). Release unit now includes both. audit-agent.ps1 checks both files, flags an unwritten system prompt and listed reference files that don't exist. STANDARD, CREATE, AGENT-PROMPT, README and the bundle updated.
+
 ## Decisions
 
 <!-- Append-only. Format: - YYYY-MM-DD — decision — why -->

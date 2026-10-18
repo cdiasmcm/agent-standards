@@ -29,6 +29,9 @@ Schema (`deploy/export-agent.ps1`), so keep its columns.
 - [S] **Data contract per source** (owner, schema, freshness target, quality checks, who is told when it breaks): TODO
 
 ## Context the agent needs
+Small reference files the agent always uses (naming conventions, code lists, mappings) live in
+`knowledge/` and are listed in `knowledge/README.md`. The fields below say how they reach the model.
+
 - [L] **Facts injected each run** (`context.facts`: date, timezone, business rules): TODO
 - [S] **Knowledge it fetches on demand** (`context.knowledge_refs`; top-K, never everything): TODO
 - [S] **Prior state it receives** (`context.prior_state`: decisions, constraints, open questions; never the transcript): TODO

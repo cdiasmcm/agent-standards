@@ -87,7 +87,7 @@ Setup per tool (Genie Code, chat tools): [DEPLOY.md](DEPLOY.md).
 | Path | What it is |
 |------|------------|
 | `STANDARD.md` | **The standard**: 8 blocks, 3 golden rules, tiers, stages, sources |
-| `skeleton/` | Template copied for every new agent (all Markdown; one place per block) |
+| `skeleton/` | Template copied for every new agent (all Markdown; one place per block), including `PROMPT.md` for the instructions to the model and `knowledge/` for reference files such as naming conventions |
 | `AGENT-IO.md` | Standard input/output envelope (blocks 3–4) |
 | `deploy/audit-agent.ps1` | Block-by-block completeness audit of an agent folder |
 | `deploy/export-agent.ps1` | At build time: Markdown tables → JSON Schema + JSONL |

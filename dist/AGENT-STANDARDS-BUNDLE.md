@@ -1,6 +1,6 @@
 # AGENT STANDARDS BUNDLE
 
-> Generated 2026-10-16 by deploy/build-bundle.ps1. Do not edit; edit the source files and rebuild.
+> Generated 2026-10-17 by deploy/build-bundle.ps1. Do not edit; edit the source files and rebuild.
 > This single file contains all the standards. Where the text says "read <FILE>.md", use that file's section below (headed "FILE: <name>").
 > Sections named skeleton/... are the templates for a new agent: recreate them as separate files in the agent's folder.
 
@@ -12,7 +12,9 @@
 - FILE: AGENT-PROMPT.md
 - FILE: AGENT-IO.md
 - FILE: skeleton/AGENT.md
+- FILE: skeleton/PROMPT.md
 - FILE: skeleton/io/INPUT.md
+- FILE: skeleton/knowledge/README.md
 - FILE: skeleton/io/OUTPUT.md
 - FILE: skeleton/evals/EVAL-PLAN.md
 - FILE: skeleton/evals/GOLDEN-SET.md
@@ -150,8 +152,12 @@ For each block, ask only the questions its fields need for the tier. Fields abov
 `N/A (tier)`. Fill the files, then confirm with the user before moving on.
 1. **Purpose** (`AGENT.md` §1): start with task selection (FRAMEWORK D0). If the task isn't Green
    Light, stop and say so.
-2. **Steps** (`AGENT.md` §2): one agent first; challenge every step tagged "agent".
-3. **Input** (`io/INPUT.md`) → 4. **Output** (`io/OUTPUT.md`)
+2. **Steps** (`AGENT.md` §2): one agent first; challenge every step tagged "agent". Then write the
+   instructions to the model in `PROMPT.md` (role, system prompt, examples).
+3. **Input** (`io/INPUT.md`): ask for any reference files the agent must follow (naming conventions,
+   code lists, mappings). Save each as CSV or Markdown in `knowledge/` and list it in
+   `knowledge/README.md`. → 4. **Output** (`io/OUTPUT.md`): a rule from a reference file that must
+   always hold gets a DQ check against that file.
 5. **Tools & Access** (`AGENT.md` §5) → 6. **Controls** (`AGENT.md` §6)
 7. **Evals & DQ** (`evals/`): add a first golden-set row from the dry-run plan.
 8. **Operations** (`AGENT.md` §8), plus the first `CHANGELOG.md` entry and a `STATE.md` "Resume here".
@@ -189,8 +195,8 @@ PATTERNS, PRINCIPLES). This page is the version you explain to someone.
 | # | Block | Every agent has… | Where in the skeleton | How-to |
 |---|-------|------------------|-----------------------|--------|
 | 1 | **Purpose** | The right task (Green Light), a one-sentence job, a north-star metric and baseline, a risk tier, owners, and an AI-disclosure / data-protection check | `AGENT.md` §1 | FRAMEWORK D0–D1 · patterns O7, 11 |
-| 2 | **Steps** | A process map with each step tagged code / LLM / workflow / agent / human, a stop condition with caps, an escalation rule, and one agent unless a split is proven | `AGENT.md` §2 | FRAMEWORK D2–D5 · patterns 1–2, O1, O2, O11, O13 |
-| 3 | **Input** | The standard input envelope, its own payload fields, and **input data-quality checks** (complete, valid, fresh, no duplicates, trusted vs untrusted) | `io/INPUT.md` | AGENT-IO · patterns 7–8, 18, O12 |
+| 2 | **Steps** | A process map with each step tagged code / LLM / workflow / agent / human, a stop condition with caps, an escalation rule, one agent unless a split is proven, and its instructions to the model (role, system prompt, examples) | `AGENT.md` §2 + `PROMPT.md` | FRAMEWORK D2–D5 · patterns 1–2, O1, O2, O11, O13 |
+| 3 | **Input** | The standard input envelope, its own payload fields, and **input data-quality checks** (complete, valid, fresh, no duplicates, trusted vs untrusted), and its reference files (naming conventions, code lists, mappings) as versioned CSV/Markdown | `io/INPUT.md` + `knowledge/` | AGENT-IO · patterns 7–8, 18, O12 |
 | 4 | **Output** | The standard output envelope, its own result fields, and **output data-quality checks** (schema-valid, required fields, grounded/cited) | `io/OUTPUT.md` | AGENT-IO · patterns O3 (L1), O8 |
 | 5 | **Tools & Access** | Distinct, namespaced tools with read/write rights; its own identity with short-lived credentials; safe writes; the trifecta broken in code; vetted third-party tools | `AGENT.md` §5 | patterns 3, 18–20, O8 · PLATFORM §4b |
 | 6 | **Controls** | A human-control level (H1–H5) per action, "must never" rules enforced in code, an autonomy plan, guardrails, and a kill switch | `AGENT.md` §6 | patterns 4, 21, O5, O10 · OWASP Agentic |
@@ -271,7 +277,7 @@ Operations) and **3 golden rules** (simplest first · prompts steer, code enforc
 |------|------------|
 | `STANDARD.md` | The 8 blocks, tiers, stages, sources. Explain the standard from this page |
 | `AUDIT.md`, `CREATE.md` | Step-by-step runbooks when launched by URL ("Read <URL> and audit / create …") |
-| `skeleton/` | The template every agent starts from: `AGENT.md`, `io/INPUT.md`, `io/OUTPUT.md`, `evals/EVAL-PLAN.md`, `evals/GOLDEN-SET.md`, `CHANGELOG.md`, `DECISIONS.md`, `STATE.md`, `reviews/` |
+| `skeleton/` | The template every agent starts from: `AGENT.md`, `PROMPT.md`, `io/INPUT.md`, `knowledge/`, `io/OUTPUT.md`, `evals/EVAL-PLAN.md`, `evals/GOLDEN-SET.md`, `CHANGELOG.md`, `DECISIONS.md`, `STATE.md`, `reviews/` |
 | `AGENT-IO.md` | Standard input and output envelope (blocks 3–4) |
 | `deploy/audit-agent.ps1` | Completeness check per block (run it, or replicate its checks by reading the files) |
 | `deploy/export-agent.ps1` | At the MVP gate: Markdown tables → JSON Schema + JSONL |
@@ -473,6 +479,7 @@ task-scoped credentials from the vault (pattern 20).
 - [L] **Caps:** max iterations TODO · timeout TODO s · max cost TODO
 - [L] **Escalate to a human after:** TODO failed attempts, or on: TODO
 - [L] **Exit reasons logged:** done / cap / timeout / budget / error / human_gate (keep as is)
+- [L] **Instructions to the model** (role, system prompt, examples) are in `PROMPT.md` (keep as is)
 - [S] **Plan-change limit** (how far it may change its own plan before a checkpoint): TODO
 - [S] **One agent or several?** TODO (one agent, or the D4 reason 1–4 plus the X5 evidence for each extra agent)
 - [if: more than one agent] **Topology:** TODO (hierarchical / pipeline / peer-to-peer + validator / swarm; A2A only across trust boundaries)
@@ -513,7 +520,7 @@ task-scoped credentials from the vault (pattern 20).
 - [L] **Budget enforced at:** TODO (gateway / provider) · per run TODO · per month TODO
 - [L] **Logging:** what is logged TODO · secrets and personal data redacted TODO · who can read logs TODO
 - [L] **Registry entry:** agent TODO · solution TODO · mission TODO · tier/stage TODO · owners TODO · model TODO · status TODO · **portfolio registry kept at:** TODO (outside agent-standards)
-- [L] **Version history** kept in `CHANGELOG.md`: release unit = prompt + model + tools + memory config + I/O contract (keep as is)
+- [L] **Version history** kept in `CHANGELOG.md`: release unit = prompt (`PROMPT.md`) + model + tools + memory config + I/O contract + reference files (`knowledge/`) (keep as is)
 - [L] **Human-decision log** (runtime approvals, rejections, edits, overrides): stored in TODO · fields: request_id, agent version, action, preview shown, decision, decided_by, time, reason, final value (keep as is) · retention TODO · access TODO
 - [S] **Edits and overrides feed evals** (`evals/GOLDEN-SET.md`): TODO (how, how often)
 - [S] **Rollout:** shadow TODO → canary TODO % → full · **rollback trigger:** TODO · **rollback method:** repoint to the last good `CHANGELOG.md` version, clear caches TODO
@@ -521,6 +528,40 @@ task-scoped credentials from the vault (pattern 20).
 - [S] **Where it runs:** TODO (harness for prototype; hosted runtime for anything unattended)
 - [if: memory] **Memory rules:** what it may remember TODO · retention TODO · who can see or delete it TODO
 - [L] **Handoff files** present: `STATE.md` (Resume here), `DECISIONS.md`, `CHANGELOG.md`, `reviews/` (keep as is)
+
+---
+
+# FILE: skeleton/PROMPT.md
+
+# Prompt — the instructions the model gets
+
+*Part of block 2 Steps: how the model is told to do its steps.* The prompt **steers**; anything that
+must always hold is enforced in code (`AGENT.md` §6, `io/OUTPUT.md` DQ checks). Every change here is a
+new version in `CHANGELOG.md` and re-runs the evals. No secrets, credentials or personal data in this
+file.
+
+**Prompt version:** 0.1.0
+
+- [L] **Role** (one sentence, same job as `AGENT.md` §1): TODO
+- [L] **Context it receives** each run: facts, knowledge and prior state as defined in `io/INPUT.md`, reference files from `knowledge/` (keep as is)
+- [L] **Output format:** the result fields in `io/OUTPUT.md` (keep as is)
+- [S] **Must-never rules, repeated as guidance** (each one is enforced in code per `AGENT.md` §6): TODO
+- [S] **When unsure:** what to do instead of guessing (ask, flag, escalate): TODO
+
+## System prompt
+Write the full instructions in the block below. The audit flags it while it still says TODO.
+
+```text
+TODO
+```
+
+## Examples (few-shot)
+Short, real, PII-scrubbed examples (from `io/examples/` or the golden set). Not the same cases the evals
+score, or the evals stop measuring anything.
+
+| ID | Input (short) | Expected output (short) | Tier |
+|----|---------------|-------------------------|------|
+| P1 | TODO | TODO | [S] |
 
 ---
 
@@ -557,9 +598,36 @@ Schema (`deploy/export-agent.ps1`), so keep its columns.
 - [S] **Data contract per source** (owner, schema, freshness target, quality checks, who is told when it breaks): TODO
 
 ## Context the agent needs
+Small reference files the agent always uses (naming conventions, code lists, mappings) live in
+`knowledge/` and are listed in `knowledge/README.md`. The fields below say how they reach the model.
+
 - [L] **Facts injected each run** (`context.facts`: date, timezone, business rules): TODO
 - [S] **Knowledge it fetches on demand** (`context.knowledge_refs`; top-K, never everything): TODO
 - [S] **Prior state it receives** (`context.prior_state`: decisions, constraints, open questions; never the transcript): TODO
+
+---
+
+# FILE: skeleton/knowledge/README.md
+
+# Knowledge — reference files the agent uses
+
+*Part of block 3 Input.* Small, reviewed reference tables and documents the agent needs to do its job:
+naming conventions, code lists, mapping tables, glossaries, business rules. Put each file in this folder
+and list it below.
+
+- **Format:** CSV or Markdown, not `.xlsx` or `.docx`, so git shows every change and both the model and
+  code can read it. The master can stay where its owner keeps it; this folder holds the exported copy.
+- **Not here:** personal data, credentials, secrets, or large / fast-changing data. Those stay in their
+  own system and are referenced from `io/INPUT.md` (`context.knowledge_refs`).
+- **A change to a file here is a new agent version** (`CHANGELOG.md`) and re-runs the evals.
+- **A rule that must always hold** (e.g. a naming convention) is also checked in code: the output DQ
+  check in `io/OUTPUT.md` validates against the same file.
+
+| File | What it holds | Owner | Source of truth | Refreshed | Used as (fact / knowledge_ref / DQ check) | Tier |
+|------|---------------|-------|-----------------|-----------|-------------------------------------------|------|
+| TODO | TODO | TODO | TODO | TODO | TODO | [if: reference files] |
+
+No reference files? Replace the row's TODOs with `N/A (none)`.
 
 ---
 
@@ -667,7 +735,8 @@ real cases exist. This table is exported to JSONL for eval tools (`deploy/export
 
 # Changelog — agent versions
 
-One version = the **release unit**: prompt + model + tools + memory config + I/O contract. Every
+One version = the **release unit**: prompt (`PROMPT.md`) + model + tools + memory config + I/O contract
++ reference files (`knowledge/`). Every
 trace and output carries this version (`versions.agent`). Rollback = repoint to the last version
 marked **good**. Newest at the top. Never edit an old row.
 

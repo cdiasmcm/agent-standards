@@ -94,8 +94,8 @@ if ($agent) {
 
 $blocks = @(
     @{ N = 1; Name = 'Purpose';        File = 'AGENT.md';            Section = 1 },
-    @{ N = 2; Name = 'Steps';          File = 'AGENT.md';            Section = 2 },
-    @{ N = 3; Name = 'Input';          File = 'io\INPUT.md';         Section = 0 },
+    @{ N = 2; Name = 'Steps';          File = 'AGENT.md';            Section = 2; Extra = 'PROMPT.md' },
+    @{ N = 3; Name = 'Input';          File = 'io\INPUT.md';         Section = 0; Extra = 'knowledge\README.md' },
     @{ N = 4; Name = 'Output';         File = 'io\OUTPUT.md';        Section = 0 },
     @{ N = 5; Name = 'Tools & Access'; File = 'AGENT.md';            Section = 5 },
     @{ N = 6; Name = 'Controls';       File = 'AGENT.md';            Section = 6 },
@@ -110,11 +110,42 @@ foreach ($b in $blocks) {
     $lines = Read-Lines (Join-Path $Path $b.File)
     if ($lines -and $b.Section -gt 0) { $lines = Get-Section $lines $b.Section }
     if (-not $lines) {
-        $results += [pscustomobject]@{ N = $b.N; Block = $b.Name; Status = 'MISSING'; Filled = '-'; Issues = @("$($b.File) (section $($b.Section)) not found") }
+        $where = if ($b.Section -gt 0) { "$($b.File) (section $($b.Section))" } else { $b.File }
+        $results += [pscustomobject]@{ N = $b.N; Block = $b.Name; Status = 'MISSING'; Filled = '-'; Issues = @("$where not found") }
         continue
     }
     $m = Measure-Fields $lines $tier
     $issues += $m.Open
+
+    # Blocks 2 and 3 have a second file: PROMPT.md (instructions) and knowledge/README.md (reference files).
+    if ($b.Extra) {
+        $extra = Read-Lines (Join-Path $Path $b.Extra)
+        if (-not $extra) { $issues += "$($b.Extra) missing" }
+        else {
+            $mx = Measure-Fields $extra $tier
+            $m = @{ Total = $m.Total + $mx.Total; Open = @($m.Open) + @($mx.Open) }
+            $issues += $mx.Open
+            if ($b.N -eq 2) {
+                $inFence = $false; $afterHeading = $false; $placeholder = $false
+                foreach ($l in $extra) {
+                    if ($l -match '^##\s') { $afterHeading = ($l -match '^##\s+System prompt') }
+                    if ($afterHeading -and $l -match '^```') { $inFence = -not $inFence; continue }
+                    if ($inFence -and $l.Trim() -eq 'TODO') { $placeholder = $true }
+                }
+                if ($placeholder) { $issues += 'PROMPT.md: system prompt not written yet' }
+            }
+            if ($b.N -eq 3) {
+                foreach ($l in $extra) {
+                    if ($l -notmatch '^\|') { continue }
+                    $cell = ($l.Trim().Trim('|').Split('|')[0]).Trim().Trim('`')
+                    if ($cell -match '^(File|-+|TODO|N/A.*)?$') { continue }
+                    if (-not (Test-Path -LiteralPath (Join-Path (Join-Path $Path 'knowledge') $cell))) {
+                        $issues += "knowledge\$cell is listed in knowledge\README.md but not found"
+                    }
+                }
+            }
+        }
+    }
 
     if ($b.N -eq 1) {
         $zone = ($lines | Where-Object { $_ -match 'Task selection' } | Select-Object -First 1)
