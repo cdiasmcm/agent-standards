@@ -46,6 +46,8 @@ Resume here → Test the one-line AUDIT prompt from a real agent folder; set up 
 
 - 2026-10-18 — Claude — Skeleton is applied in place: a Databricks test from `fit-gap` created an unwanted `fit-gap/schema-mapper/` because Create said "copy to `<solution folder>/<agent-name>/`" and CREATE defaulted to "a new folder". New rule (AGENT-PROMPT Rules): the agent folder is the folder the session started in (or the open notebook's folder); never create a subfolder or invent a folder name; a folder with files means Adopt in place. CREATE, START-HERE, SKILL, STANDARD, AUDIT and the local Claude skill updated.
 
+- 2026-10-19 — Claude — A2A Agent Card generated automatically: the export (`export-agent.ps1` + new Python twin `export_agent.py`) now always writes `build/agent-card.json` (A2A spec 1.0.0 fields: name, description, supportedInterfaces, version, capabilities, default modes, one skill = the agent's job; never internal tools) from AGENT.md heading, PROMPT.md Role and examples, CHANGELOG top row and a new `[if: exposed via A2A]` line in AGENT.md §5 (endpoint, binding, auth, who may call). Tables with TODO rows are skipped with a note instead of failing. Create, Adopt and Gate run the export without asking; both audits flag a missing card. Fixed a PowerShell bug where a one-row table was unrolled into its cells. Parity of both exports verified on 3 cases (skeleton, exposed agent, golden set with 2 cases). AGENT-PROMPT, CREATE, AUDIT (Databricks download list), AGENT-IO, PLATFORM, README, AGENTS updated.
+
 ## Decisions
 
 <!-- Append-only. Format: - YYYY-MM-DD — decision — why -->

@@ -7,8 +7,8 @@ to an agent. Those are defined in the agent's own `io/INPUT.md` and `io/OUTPUT.m
 Why: one shape means routing, logging, evals, rollback and the human-decision log work the same way for
 every agent (PLATFORM §3). The pre-model hook validates the envelope before any model call (P21).
 
-Format: Markdown tables are the source of truth. At build time `deploy/export-agent.ps1` generates
-JSON Schema from them. Never hand-edit the generated JSON.
+Format: Markdown tables are the source of truth. At build time `deploy/export-agent.ps1` (or `export_agent.py`) generates
+JSON Schema from them, plus the A2A Agent Card (`build/agent-card.json`). Never hand-edit the generated JSON.
 
 ## Input envelope
 Tier column: **L** = required at every tier · **S** = Standard and up · **C** = Critical.

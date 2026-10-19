@@ -38,6 +38,7 @@ Own skills live in `skills/<name>/SKILL.md` (see `skills/README.md`). Which acti
 
 - [L] **Identity & credentials:** its own non-human identity TODO · short-lived, task-scoped credentials from the vault, never in prompts TODO
 - [L] **Trifecta:** private data TODO · untrusted content TODO · outbound channel TODO → leg removed in code: TODO
+- [if: exposed via A2A] **A2A:** endpoint TODO (https URL) · binding JSONRPC (JSONRPC / GRPC / HTTP+JSON) · auth TODO (oauth2 / openIdConnect / apiKey / http / mtls) · who may call it TODO. Only for callers outside your trust boundary; the Agent Card is generated from this folder (`build/agent-card.json`)
 - [if: writes or runs code] **Safe changes:** preview → commit, service-side ceiling, idempotency key, compensating action, audit record TODO · if it misfires with nobody watching: damage, who notices, what fixes it TODO · sandbox for code TODO
 
 ## 6. Controls

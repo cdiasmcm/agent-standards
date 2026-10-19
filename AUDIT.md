@@ -23,12 +23,12 @@ Prompt that brought you here:
 - **No shell, only Python (e.g. Databricks Genie Code):**
   1. If the workspace has a Git folder of agent-standards (often `/Users/<you>/.assistant/skills/agent-standards`), use it.
   2. Otherwise run a Python cell that downloads the files you need into a **temporary folder** (never
-     into the agent's folder), at least `STANDARD.md`, `AGENT-PROMPT.md` and `deploy/audit_agent.py`:
+     into the agent's folder), at least `STANDARD.md`, `AGENT-PROMPT.md`, `deploy/audit_agent.py` and `deploy/export_agent.py`:
      ```python
      import os, tempfile, urllib.request
      base = "https://raw.githubusercontent.com/cdiasmcm/agent-standards/main/"
      std = os.path.join(tempfile.gettempdir(), "agent-standards")
-     for f in ["STANDARD.md", "AGENT-PROMPT.md", "deploy/audit_agent.py"]:
+     for f in ["STANDARD.md", "AGENT-PROMPT.md", "deploy/audit_agent.py", "deploy/export_agent.py"]:
          os.makedirs(os.path.dirname(os.path.join(std, f)), exist_ok=True)
          urllib.request.urlretrieve(base + f, os.path.join(std, f))
      ```

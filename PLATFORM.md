@@ -50,6 +50,11 @@ fixed steps in code; swarms need a durable queue.
 contract (sub-workflow, function call, queue). **A2A** is only for agents across a trust boundary
 (another company or vendor): Agent Card discovery, tasks with a lifecycle, artifacts, standard auth.
 MCP is not an A2A transport, and not an agent-discovery protocol. [WB §16.6–16.7]
+**Agent Card (Our rule):** every agent's card (A2A v1.0) is generated, never hand-written, by the export
+(`deploy/export-agent.ps1` / `export_agent.py`) into `build/agent-card.json` from `AGENT.md`, `PROMPT.md`
+and `CHANGELOG.md`. It describes the agent's job only, never its internal tools or skills. It's published
+at `https://{domain}/.well-known/agent-card.json` only when `AGENT.md` §5 fills the A2A line, with the
+security scheme added for the chosen auth.
 **Infrastructure for multi-agent jobs:** a **durable** queue (at-least-once, e.g. Redis Streams,
 Kafka, a cloud queue or a job table) when retries or "runs exactly once" matter. Plain pub/sub can
 drop messages, so use it only for live status. Add a scheduler/coordinator with timeouts and human

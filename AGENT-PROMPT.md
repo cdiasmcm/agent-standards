@@ -25,7 +25,7 @@ Operations) and **3 golden rules** (simplest first · prompts steer, code enforc
 | `AGENT-IO.md` | Standard input and output envelope (blocks 3–4) |
 | `deploy/audit-agent.ps1` | Completeness check per block (run it, or replicate its checks by reading the files) |
 | `deploy/audit_agent.py` | The same check in Python (same results), for tools without PowerShell such as Databricks Genie Code |
-| `deploy/export-agent.ps1` | At the MVP gate: Markdown tables → JSON Schema + JSONL |
+| `deploy/export-agent.ps1`, `deploy/export_agent.py` | Builds `build/`: JSON Schemas, golden-set JSONL and the A2A Agent Card (`agent-card.json`). Run automatically after Create and Adopt, and at every gate |
 | `FRAMEWORK.md` | How-to for blocks 1–2 (D0 task selection → D7 build order) |
 | `EVALS.md` | How-to for block 7 (E1–E7) |
 | `PLATFORM.md` | How-to for blocks 5, 6, 8 across many agents (registry, hooks, gateways, safe writes, operating model, Databricks mapping) |
@@ -78,7 +78,9 @@ if the folder already holds the agent's files, it's **Adopt**.
    and the rest of `PROMPT.md`. Fields above the tier are marked `N/A (tier)`. Record the model choice
    and any split into several agents in `DECISIONS.md`. Write the first `CHANGELOG.md` entry and a
    `STATE.md` "Resume here", all in the agent's folder.
-5. Run the audit (report saved to `<agent folder>/reviews/`) and show the gap report. Anything left
+5. **Build, without asking:** run `deploy/export-agent.ps1 -Path <agent folder>` (no PowerShell:
+   `deploy/export_agent.py`). It writes `build/`, including the A2A Agent Card `build/agent-card.json`.
+6. Run the audit (report saved to `<agent folder>/reviews/`) and show the gap report. Anything left
    becomes the next actions.
 
 ### 2. Adopt: bring an existing agent onto the skeleton
@@ -102,7 +104,8 @@ overwrite it or invent structure.
    `_archive/README.md`. Remove originals from their old place **only after the user approves the list**.
 6. **Never create folders that aren't part of the skeleton.** A file the user wants to keep active gets a
    skeleton place (usually `knowledge/`), or stays where it is if the user decides so.
-7. Run the audit (step 3 below) and save the report in `<agent folder>/reviews/`.
+7. Run the export (`deploy/export-agent.ps1` or `export_agent.py`) to build `build/` and the Agent
+   Card, then the audit (step 3 below), and save the report in `<agent folder>/reviews/`.
 
 ### 3. Audit: an existing agent
 1. Run `deploy/audit-agent.ps1 -Path <agent folder>` (no PowerShell: `deploy/audit_agent.py`), or
@@ -124,7 +127,8 @@ overwrite it or invent structure.
 ### 4. Gate: release an agent to the next stage
 Check block 7 against the stage thresholds (golden set 20 / 100 / 300 real cases, criteria met at pass^k,
 **every critical case passing individually**) and blocks 5–6 (safety, kill switch, security scan).
-Run `deploy/export-agent.ps1` at the MVP gate. Record the decision as a new `CHANGELOG.md` row
+Run the export (`deploy/export-agent.ps1` or `export_agent.py`) at every gate so `build/` and the Agent
+Card match the version being released. Record the decision as a new `CHANGELOG.md` row
 (version, eval before → after, gate, approver, status `good` or `draft`).
 
 ### 5. Improve: feedback on the standard

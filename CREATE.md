@@ -64,6 +64,11 @@ Show everything once, in step 5.
    user can change them any time. Record the model choice in `DECISIONS.md`, and write the first
    `CHANGELOG.md` entry and a `STATE.md` "Resume here".
 
-## Step 5. Check and show
-Run the audit on the agent folder (`AUDIT.md` steps 3–5). Show the user, once: the block table, every
+## Step 5. Build, check and show
+1. **Build, without asking:** run the export on the agent folder. It writes `build/`, including the A2A
+   Agent Card `build/agent-card.json`:
+   `powershell -ExecutionPolicy Bypass -File ~/.agent-standards/deploy/export-agent.ps1 -Path <agent folder>`
+   (no PowerShell, e.g. Databricks: `python deploy/export_agent.py <agent folder>`, or in a notebook
+   `from export_agent import run_export; print(run_export("<agent folder>"))`).
+2. Run the audit on the agent folder (`AUDIT.md` steps 3–5). Show the user, once: the block table, every
 `(assumed)` item to confirm or change, and what's still open. Save the report in `<agent folder>/reviews/`.

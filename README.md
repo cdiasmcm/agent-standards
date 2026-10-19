@@ -95,7 +95,7 @@ Setup per tool (Genie Code, chat tools): [DEPLOY.md](DEPLOY.md).
 | `skeleton/` | Template copied for every new agent (all Markdown; one place per block), including `PROMPT.md` for the instructions to the model `knowledge/` for reference files such as naming conventions, `skills/` for the agent's own skills (one folder per skill), `runs/` for local run data (git-ignored by the skeleton's `.gitignore`), and `_archive/` for originals after an Adopt (ignored by the agent) |
 | `AGENT-IO.md` | Standard input/output envelope (blocks 3–4) |
 | `deploy/audit-agent.ps1`, `deploy/audit_agent.py` | Block-by-block completeness audit of an agent folder (PowerShell, or Python for Databricks and other tools without PowerShell; same results) |
-| `deploy/export-agent.ps1` | At build time: Markdown tables → JSON Schema + JSONL |
+| `deploy/export-agent.ps1`, `deploy/export_agent.py` | Builds `build/` after Create, Adopt and every gate: JSON Schemas, golden-set JSONL and the A2A Agent Card (`agent-card.json`) |
 | `deploy/build-bundle.ps1` | Builds `dist/AGENT-STANDARDS-BUNDLE.md` (everything in one file) |
 | `AUDIT.md`, `CREATE.md` | One-prompt runbooks for any AI ("Read <URL> and …") |
 | `START-HERE.md`, `AGENT-PROMPT.md`, `SKILL.md`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md` | The advisor and its entry points |

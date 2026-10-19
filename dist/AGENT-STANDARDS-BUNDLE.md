@@ -1,6 +1,6 @@
 # AGENT STANDARDS BUNDLE
 
-> Generated 2026-10-18 by deploy/build-bundle.ps1. Do not edit; edit the source files and rebuild.
+> Generated 2026-10-19 by deploy/build-bundle.ps1. Do not edit; edit the source files and rebuild.
 > This single file contains all the standards. Where the text says "read <FILE>.md", use that file's section below (headed "FILE: <name>").
 > Sections named skeleton/... are the templates for a new agent: recreate them as separate files in the agent's folder.
 
@@ -99,12 +99,12 @@ Prompt that brought you here:
 - **No shell, only Python (e.g. Databricks Genie Code):**
   1. If the workspace has a Git folder of agent-standards (often `/Users/<you>/.assistant/skills/agent-standards`), use it.
   2. Otherwise run a Python cell that downloads the files you need into a **temporary folder** (never
-     into the agent's folder), at least `STANDARD.md`, `AGENT-PROMPT.md` and `deploy/audit_agent.py`:
+     into the agent's folder), at least `STANDARD.md`, `AGENT-PROMPT.md`, `deploy/audit_agent.py` and `deploy/export_agent.py`:
      ```python
      import os, tempfile, urllib.request
      base = "https://raw.githubusercontent.com/cdiasmcm/agent-standards/main/"
      std = os.path.join(tempfile.gettempdir(), "agent-standards")
-     for f in ["STANDARD.md", "AGENT-PROMPT.md", "deploy/audit_agent.py"]:
+     for f in ["STANDARD.md", "AGENT-PROMPT.md", "deploy/audit_agent.py", "deploy/export_agent.py"]:
          os.makedirs(os.path.dirname(os.path.join(std, f)), exist_ok=True)
          urllib.request.urlretrieve(base + f, os.path.join(std, f))
      ```
@@ -226,8 +226,13 @@ Show everything once, in step 5.
    user can change them any time. Record the model choice in `DECISIONS.md`, and write the first
    `CHANGELOG.md` entry and a `STATE.md` "Resume here".
 
-## Step 5. Check and show
-Run the audit on the agent folder (`AUDIT.md` steps 3–5). Show the user, once: the block table, every
+## Step 5. Build, check and show
+1. **Build, without asking:** run the export on the agent folder. It writes `build/`, including the A2A
+   Agent Card `build/agent-card.json`:
+   `powershell -ExecutionPolicy Bypass -File ~/.agent-standards/deploy/export-agent.ps1 -Path <agent folder>`
+   (no PowerShell, e.g. Databricks: `python deploy/export_agent.py <agent folder>`, or in a notebook
+   `from export_agent import run_export; print(run_export("<agent folder>"))`).
+2. Run the audit on the agent folder (`AUDIT.md` steps 3–5). Show the user, once: the block table, every
 `(assumed)` item to confirm or change, and what's still open. Save the report in `<agent folder>/reviews/`.
 
 ---
@@ -352,7 +357,7 @@ Operations) and **3 golden rules** (simplest first · prompts steer, code enforc
 | `AGENT-IO.md` | Standard input and output envelope (blocks 3–4) |
 | `deploy/audit-agent.ps1` | Completeness check per block (run it, or replicate its checks by reading the files) |
 | `deploy/audit_agent.py` | The same check in Python (same results), for tools without PowerShell such as Databricks Genie Code |
-| `deploy/export-agent.ps1` | At the MVP gate: Markdown tables → JSON Schema + JSONL |
+| `deploy/export-agent.ps1`, `deploy/export_agent.py` | Builds `build/`: JSON Schemas, golden-set JSONL and the A2A Agent Card (`agent-card.json`). Run automatically after Create and Adopt, and at every gate |
 | `FRAMEWORK.md` | How-to for blocks 1–2 (D0 task selection → D7 build order) |
 | `EVALS.md` | How-to for block 7 (E1–E7) |
 | `PLATFORM.md` | How-to for blocks 5, 6, 8 across many agents (registry, hooks, gateways, safe writes, operating model, Databricks mapping) |
@@ -405,7 +410,9 @@ if the folder already holds the agent's files, it's **Adopt**.
    and the rest of `PROMPT.md`. Fields above the tier are marked `N/A (tier)`. Record the model choice
    and any split into several agents in `DECISIONS.md`. Write the first `CHANGELOG.md` entry and a
    `STATE.md` "Resume here", all in the agent's folder.
-5. Run the audit (report saved to `<agent folder>/reviews/`) and show the gap report. Anything left
+5. **Build, without asking:** run `deploy/export-agent.ps1 -Path <agent folder>` (no PowerShell:
+   `deploy/export_agent.py`). It writes `build/`, including the A2A Agent Card `build/agent-card.json`.
+6. Run the audit (report saved to `<agent folder>/reviews/`) and show the gap report. Anything left
    becomes the next actions.
 
 ### 2. Adopt: bring an existing agent onto the skeleton
@@ -429,7 +436,8 @@ overwrite it or invent structure.
    `_archive/README.md`. Remove originals from their old place **only after the user approves the list**.
 6. **Never create folders that aren't part of the skeleton.** A file the user wants to keep active gets a
    skeleton place (usually `knowledge/`), or stays where it is if the user decides so.
-7. Run the audit (step 3 below) and save the report in `<agent folder>/reviews/`.
+7. Run the export (`deploy/export-agent.ps1` or `export_agent.py`) to build `build/` and the Agent
+   Card, then the audit (step 3 below), and save the report in `<agent folder>/reviews/`.
 
 ### 3. Audit: an existing agent
 1. Run `deploy/audit-agent.ps1 -Path <agent folder>` (no PowerShell: `deploy/audit_agent.py`), or
@@ -451,7 +459,8 @@ overwrite it or invent structure.
 ### 4. Gate: release an agent to the next stage
 Check block 7 against the stage thresholds (golden set 20 / 100 / 300 real cases, criteria met at pass^k,
 **every critical case passing individually**) and blocks 5–6 (safety, kill switch, security scan).
-Run `deploy/export-agent.ps1` at the MVP gate. Record the decision as a new `CHANGELOG.md` row
+Run the export (`deploy/export-agent.ps1` or `export_agent.py`) at every gate so `build/` and the Agent
+Card match the version being released. Record the decision as a new `CHANGELOG.md` row
 (version, eval before → after, gate, approver, status `good` or `draft`).
 
 ### 5. Improve: feedback on the standard
@@ -495,8 +504,8 @@ to an agent. Those are defined in the agent's own `io/INPUT.md` and `io/OUTPUT.m
 Why: one shape means routing, logging, evals, rollback and the human-decision log work the same way for
 every agent (PLATFORM §3). The pre-model hook validates the envelope before any model call (P21).
 
-Format: Markdown tables are the source of truth. At build time `deploy/export-agent.ps1` generates
-JSON Schema from them. Never hand-edit the generated JSON.
+Format: Markdown tables are the source of truth. At build time `deploy/export-agent.ps1` (or `export_agent.py`) generates
+JSON Schema from them, plus the A2A Agent Card (`build/agent-card.json`). Never hand-edit the generated JSON.
 
 ## Input envelope
 Tier column: **L** = required at every tier · **S** = Standard and up · **C** = Critical.
@@ -605,6 +614,7 @@ Own skills live in `skills/<name>/SKILL.md` (see `skills/README.md`). Which acti
 
 - [L] **Identity & credentials:** its own non-human identity TODO · short-lived, task-scoped credentials from the vault, never in prompts TODO
 - [L] **Trifecta:** private data TODO · untrusted content TODO · outbound channel TODO → leg removed in code: TODO
+- [if: exposed via A2A] **A2A:** endpoint TODO (https URL) · binding JSONRPC (JSONRPC / GRPC / HTTP+JSON) · auth TODO (oauth2 / openIdConnect / apiKey / http / mtls) · who may call it TODO. Only for callers outside your trust boundary; the Agent Card is generated from this folder (`build/agent-card.json`)
 - [if: writes or runs code] **Safe changes:** preview → commit, service-side ceiling, idempotency key, compensating action, audit record TODO · if it misfires with nobody watching: damage, who notices, what fixes it TODO · sandbox for code TODO
 
 ## 6. Controls
@@ -1387,6 +1397,11 @@ fixed steps in code; swarms need a durable queue.
 contract (sub-workflow, function call, queue). **A2A** is only for agents across a trust boundary
 (another company or vendor): Agent Card discovery, tasks with a lifecycle, artifacts, standard auth.
 MCP is not an A2A transport, and not an agent-discovery protocol. [WB §16.6–16.7]
+**Agent Card (Our rule):** every agent's card (A2A v1.0) is generated, never hand-written, by the export
+(`deploy/export-agent.ps1` / `export_agent.py`) into `build/agent-card.json` from `AGENT.md`, `PROMPT.md`
+and `CHANGELOG.md`. It describes the agent's job only, never its internal tools or skills. It's published
+at `https://{domain}/.well-known/agent-card.json` only when `AGENT.md` §5 fills the A2A line, with the
+security scheme added for the chosen auth.
 **Infrastructure for multi-agent jobs:** a **durable** queue (at-least-once, e.g. Redis Streams,
 Kafka, a cloud queue or a job table) when retries or "runs exactly once" matter. Plain pub/sub can
 drop messages, so use it only for live status. Add a scheduler/coordinator with timeouts and human

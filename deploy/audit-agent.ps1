@@ -211,6 +211,9 @@ foreach ($b in $blocks) {
             $resume = ($state | Where-Object { $_ -match 'Resume here' } | Select-Object -First 1)
             if (-not $resume -or $resume -match 'TODO') { $issues += 'STATE.md has no "Resume here" next action' }
         }
+        if (-not (Test-Path -LiteralPath (Join-Path (Join-Path $Path 'build') 'agent-card.json'))) {
+            $issues += 'build/agent-card.json missing (run deploy/export-agent.ps1 or export_agent.py)'
+        }
         $ignore = Read-Lines (Join-Path $Path '.gitignore')
         if (-not $ignore) { $issues += '.gitignore missing (per-request data in runs/ could be committed)' }
         elseif (-not ($ignore | Where-Object { $_ -match '^\s*/?runs/' })) { $issues += ".gitignore doesn't ignore runs/" }

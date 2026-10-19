@@ -252,6 +252,8 @@ def audit_folder(path):
                 resume = next((l for l in state if _has('Resume here', l)), None)
                 if not resume or _has('TODO', resume):
                     issues.append('STATE.md has no "Resume here" next action')
+            if not os.path.isfile(os.path.join(path, 'build', 'agent-card.json')):
+                issues.append('build/agent-card.json missing (run deploy/export-agent.ps1 or export_agent.py)')
             ignore = _read_lines(os.path.join(path, '.gitignore'))
             if not ignore:
                 issues.append('.gitignore missing (per-request data in runs/ could be committed)')
